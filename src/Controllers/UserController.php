@@ -89,8 +89,10 @@ class UserController
         $lastname = $userValidation->getOneUserInfos($login)['lastname'];
         $hashedPassword = $userValidation->getOneUserInfos($login)['password'];
         $role = $userValidation->getOneUserInfos($login)['role'];
+        $id = $userValidation->getOneUserInfos($login)['id'];
 
-        $user->setLogin($login)
+        $user->setId($id)
+        ->setLogin($login)
             ->setFirstname($firstname)
             ->setLastname($lastname)
             ->setPassword($hashedPassword)

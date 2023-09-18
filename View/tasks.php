@@ -3,7 +3,8 @@ require_once '../vendor/autoload.php';
 session_start();
 
 use App\Controllers\UserController;
-use App\Controllers\ListController;
+use App\Controllers\TaskController;
+use App\Models\TaskModel;
 
 $userController = new UserController();
 
@@ -12,6 +13,15 @@ if (isset($_GET['logOut'])) {
     die();
 }
 
+$taskModel = new TaskModel();
+$result = $taskModel->getUserLists($_SESSION['user']->getId());
+var_dump($result);
+
+if (isset($_POST['submitList'])) {
+    $taskController = new TaskController();
+    $taskController->addNewList($_POST['newList'], $_SESSION['user']->getId());
+    var_dump($taskController->addNewList($_POST['newList'], $_SESSION['user']->getId()));
+}
 
 ?>
 
@@ -40,7 +50,23 @@ if (isset($_GET['logOut'])) {
             </form>
         </div>
         <div id="listsContainer">
-
+            <h1 class="text-center">Liste des tâches</h1>
+            <div class="row">
+                <div class="col">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <?php foreach ($result as $task) : ?>
+                                <tr>
+                                    <td class="table-primary">
+                                        <h4><?= $task['name'] ?></h4>
+                                        <button type="submit" class="btn btn-primary" id="list<?= $task['id'] ?>">voir +</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 

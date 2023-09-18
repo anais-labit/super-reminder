@@ -15,7 +15,6 @@ class TaskModel
     private ?DateTime $date;
     private ?DateTime $dueDate;
 
-
     public function __construct($id = null, $idUser = null, $idList = null, $name = null, $tagName = null, $date = null, $dueDate = null)
     {
         $this->id = $id;
@@ -48,7 +47,7 @@ class TaskModel
         $this->idUser = $idUser;
         return $this;
     }
-    public function getidUser(): string
+    public function getIdUser(): string
     {
         return $this->idUser;
     }
@@ -103,6 +102,30 @@ class TaskModel
         return $this->idList;
     }
 
+    public function getUserLists($idUser): array
+    {
+        $query = 'SELECT list.id, list.name
+              FROM list
+              INNER JOIN user ON list.id_user = user.id
+              WHERE user.id = :id_user';
 
-    
+        $check = $this->connectDb()->prepare($query);
+        $check->bindValue(':id_user', $idUser, PDO::PARAM_INT);
+        $check->execute();
+
+        $lists = $check->fetchAll(PDO::FETCH_ASSOC);
+
+        return $lists;
+    }
+
+
+
+    public function createList(string $name, int $idUser): void
+    {
+        $createList = $this->connectDb()->prepare('INSERT INTO list (name, id_user) VALUES (:name, :id_user)');
+        $createList->bindValue(':name', $name);
+        $createList->bindValue(':id_user', $idUser);
+
+        $createList->execute();
+    }
 }

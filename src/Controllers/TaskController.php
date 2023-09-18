@@ -6,11 +6,25 @@ use App\Models\TaskModel;
 
 class TaskController
 {
-    private $task;
+    private $list;
 
-    function setTask(): void
-    {
-        $_SESSION['task'] = $this->task;
+    public function addNewList(string $name, int $idUser) {
+
+        $taskModel = new TaskModel();
+        // $taskModel->createList($_SESSION['user']->getId());
+        $taskModel->createList($name, $idUser);
+
+
+        // $list->setId($id)
+        //     ->setName($name)
+        //     ->setIdUser($idUser);
+
+        // $this->list = $list;
+        // $this->setSession();
+        
     }
+
+
+
 
 }
