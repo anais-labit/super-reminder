@@ -1,0 +1,15 @@
+{
+  "name": "anais/module-connexion-b2",
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "anais-labit",
+      "email": "anais.labit@gmail.com"
+    }
+  ],
+  "require": {}
+}
