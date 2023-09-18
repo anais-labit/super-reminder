@@ -5,7 +5,7 @@ namespace App\Models;
 class DatabaseModel
 {
     private $host = 'localhost';
-    private $dbname = 'moduleconnexionb2';
+    private $dbname = 'super-reminder';
     private $username = 'root';
     private $password = (PHP_OS == 'Linux') ? '' : 'root';
     private $conn;
