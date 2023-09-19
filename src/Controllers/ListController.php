@@ -7,8 +7,7 @@ use App\Models\ListModel;
 class ListController
 {
     private $list;
-    private $result;
-    
+
     public function checkIfExists($listName): bool
     {
         $lists = new ListModel();
@@ -22,24 +21,35 @@ class ListController
         }
         return false;
     }
-    
-    public function addNewList(string $name, int $idUser)
+
+    public function addNewList(string $name, int $idUser): void
     {
         if (!$this->checkIfExists($_POST['newList'])) {
             $listModel = new ListModel();
-            // $ListModel->createList($_SESSION['user']->getId());
             $listModel->createList($name, $idUser);
-        } else {
-            echo 'Cette liste existe déjà';
+            echo json_encode([
+                "success" => true,
+                "message" => "Votre liste a bien été créée."
+            ]);
+        } else if ($this->checkIfExists($_POST['newList'])) {
+            echo json_encode([
+                "success" => false,
+                "message" => "Cette liste existe déjà."
+            ]);
         }
     }
 
-    function displayUserLists(int $idUser) : array {
-
+    function displayUserLists(int $idUser): ?array
+    {
         $userLists = new ListModel();
         $result = $userLists->getUserLists($idUser);
-
         return $result;
     }
 
+    function deleteList(int $idList, int $idUser): void
+    {
+        $delete = new ListModel();
+        $delete->deleteLists($idList, $idUser);
+        echo json_encode(['message' => 'La liste a bien été supprimée.']);
+    }
 }

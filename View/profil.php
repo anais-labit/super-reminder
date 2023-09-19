@@ -39,6 +39,7 @@ if (isset($_POST['deleteForm'])) {
         <div class="container mt-5">
             <form action="" method="POST" id="updateForm">
                 <h2 class="text-center">Gestion du Profil</h2>
+                <p id="message"></p>
                 <div class="mb-3">
                     <label for="login" class="form-label">Login</label>
                     <input type="text" class="form-control" id="newLogin" placeholder="<?= ucwords($_SESSION['user']->getLogin()) ?>" readonly>
@@ -66,9 +67,6 @@ if (isset($_POST['deleteForm'])) {
             <form action="" method="POST" id="deleteForm">
                 <button type="submit" name="deleteButton" id="deleteButton" class="btn btn-danger">Supprimer le Compte</button>
             </form>
-            <p><br></p>
-            <p id="message"></p>
-            <p><br></p>
         </div>
     </div>
     <footer class="bg-dark text-light text-center py-3">

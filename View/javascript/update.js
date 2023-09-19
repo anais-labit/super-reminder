@@ -1,4 +1,4 @@
-async function displayUpdateMessage() {
+async function displayUpdateUserMessage() {
   const reqUpdate = new FormData(updateForm);
 
   console.log(updateForm);
@@ -17,7 +17,9 @@ async function displayUpdateMessage() {
   container.textContent = jsonResponse.message;
 }
 
-updateButton.addEventListener("click", async (event) => {
-  event.preventDefault();
-  displayUpdateMessage();
-});
+if (window.location.href.endsWith("profil.php")) {
+  updateButton.addEventListener("click", async (event) => {
+    event.preventDefault();
+    displayUpdateUserMessage();
+  });
+}

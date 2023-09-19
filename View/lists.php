@@ -18,12 +18,14 @@ if ($_SESSION['user']) {
     $result = $listController->displayUserLists($_SESSION['user']->getId());
 }
 
-$newListName = $_POST['newList'];
-$listValidation = $listController->checkIfExists($newListName);
-if (isset($_POST['submitList']) && (!$listValidation)) {
+if (isset($_POST['submitList'])) {
+    $newListName = $_POST['newList'];
     $listController->addNewList($newListName, $_SESSION['user']->getId());
 }
 
+if (isset($_POST['deleteList'])) {
+    $listController->deleteList($_POST['postId'], $_SESSION['user']->getId());
+}
 
 ?>
 
@@ -39,39 +41,53 @@ if (isset($_POST['submitList']) && (!$listValidation)) {
 </head>
 
 <body>
-    <header><?php include './includes/header.php' ?></header>
+    <header>
+        <?php include './includes/header.php' ?>
+    </header>
     <div class="page">
-        <div class="formContainer">
-            <form action="" id="addListForm" method="post">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="newList" name="newList" placeholder="Ajouter une liste">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary" name="submitList" id="submitList">+</button>
-                    </div>
+        <div class="container mt-5">
+            <h2 class="text-center">Mes listes</h2>
+            <p id="message"></p>
+            <div class="container">
+                <div class="formContainer">
+                    <form action="" id="addListForm" method="post">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="newList" name="newList" placeholder="Ajouter une liste">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary" name="submitList" id="submitList">+</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
-        <div id="listsContainer">
-            <h1 class="text-center">Mes listes</h1>
-            <div class="row">
-                <div class="col">
-                    <table class="table table-bordered">
-                        <tbody>
-                            <?php foreach ($result as $task) : ?>
-                                <tr>
-                                    <td class="table-primary">
-                                        <h4><?= $task['name'] ?></h4>
-                                        <button type="submit" class="btn btn-primary" id="list<?= $task['id'] ?>">voir +</button>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                <div id="listsContainer">
+                    <div class="row">
+                        <div class="col">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <form action="" method="POST">
+                                        <?php if (!empty($result)) {
+                                            foreach ($result as $list) : ?>
+                                                <tr>
+                                                    <td class="table-primary">
+                                                        <h4><?= $list['name'] ?></h4>
+                                                        <div class="btn-group" role="group">
+                                                            <button type="submit" name="openList" class="btn btn-primary" id="openList<?= $list['id'] ?>">Voir +</button>
+                                                            <button type="submit" name="deleteList" class="btn btn-danger" id="deleteList<?= $list['id'] ?>">Supprimer</button>
+                                                        </div>
+                                                        <input type="hidden" name="postId" value="<?= $list['id'] ?>">
+                                                    </td>
+                                                </tr>
+                                        <?php endforeach;
+                                        } ?>
+                                    </form>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
     <footer class="bg-dark text-light text-center py-3">
         <?php include './includes/footer.php'; ?>
     </footer>
