@@ -15,7 +15,7 @@ class ListController
         $userLists = $lists->getUserLists($idUser);
 
         foreach ($userLists as $list) {
-            if ($list['name'] == $listName) {
+            if (strtolower($list['name']) == strtolower($listName)) {
                 return true;
             }
         }

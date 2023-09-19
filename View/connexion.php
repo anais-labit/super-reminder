@@ -21,7 +21,7 @@ if (isset($_POST['submitForm']) && (!empty($_POST['password']))) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
     <script defer src="./javascript/read.js"></script>
-    <title>Connexion</title>
+    <title>Super-Reminder</title>
 </head>
 
 <header class="gl-header"> <?php include './includes/header.php' ?></header>

@@ -28,8 +28,7 @@ if (isset($_POST['deleteForm'])) {
     <link rel="stylesheet" href="./css/style.css">
     <script defer src="./javascript/update.js"></script>
     <script defer src="./javascript/delete.js"></script>
-
-    <title>Profil</title>
+    <title>Super-Reminder</title>
 </head>
 
 <header class="gl-header"> <?php include './includes/header.php' ?></header>

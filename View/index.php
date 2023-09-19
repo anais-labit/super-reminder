@@ -42,7 +42,7 @@ if (isset($_GET['logOut'])) {
                             <a href="./admin.php" class="btn btn-primary mt-3">Voir la liste des utilisateurs</a>
                         <?php } else { ?>
                             <div>
-                                <p>Maintenant que vous avez créé votre compte, vous pouvez créer vos Todolists et modifier vos informations personnelles. </p>
+                                <p>Maintenant que vous avez créé votre compte, vous pouvez créer vos To-Do-Lists et modifier vos informations personnelles. </p>
                                 <a href="./lists.php" class="btn btn-primary">Créer mes ToDoLists</a>
                                 <a href="./profil.php" class="btn btn-primary">Gérer mon profil</a>
                             </div>

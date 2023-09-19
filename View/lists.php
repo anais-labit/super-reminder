@@ -18,12 +18,12 @@ if ($_SESSION['user']) {
     $result = $listController->displayUserLists($_SESSION['user']->getId());
 }
 
-if (isset($_POST['submitList'])) {
+if (isset($_POST['submitListBtn'])) {
     $newListName = $_POST['newList'];
     $listController->addNewList($newListName, $_SESSION['user']->getId());
 }
 
-if (isset($_POST['deleteList'])) {
+if (isset($_POST['deleteListBtn'])) {
     $listController->deleteList($_POST['postId'], $_SESSION['user']->getId());
 }
 
@@ -35,9 +35,12 @@ if (isset($_POST['deleteList'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faux Site</title>
+    <title>Super-Reminder</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
+    <script defer src="./javascript/create.js"></script>
+    <script defer src="./javascript/update.js"></script>
+    <script defer src="./javascript/delete.js"></script>
 </head>
 
 <body>
@@ -54,7 +57,7 @@ if (isset($_POST['deleteList'])) {
                         <div class="input-group">
                             <input type="text" class="form-control" id="newList" name="newList" placeholder="Ajouter une liste">
                             <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary" name="submitList" id="submitList">+</button>
+                                <button type="submit" class="btn btn-primary" name="submitListBtn" id="submitListBtn">+</button>
                             </div>
                         </div>
                     </form>
@@ -65,16 +68,17 @@ if (isset($_POST['deleteList'])) {
                             <table class="table table-bordered">
                                 <tbody>
                                     <form action="" method="POST">
-                                        <?php if (!empty($result)) {
+                                        <?php
+                                        if (!empty($result)) {
                                             foreach ($result as $list) : ?>
                                                 <tr>
                                                     <td class="table-primary">
-                                                        <h4><?= $list['name'] ?></h4>
+                                                        <h4><?= ucwords($list['name']) ?></h4>
                                                         <div class="btn-group" role="group">
-                                                            <button type="submit" name="openList" class="btn btn-primary" id="openList<?= $list['id'] ?>">Voir +</button>
-                                                            <button type="submit" name="deleteList" class="btn btn-danger" id="deleteList<?= $list['id'] ?>">Supprimer</button>
+                                                            <button type="submit" name="openListBtn" class="btn btn-primary" id="openListBtn<?= $list['id'] ?>">Voir +</button>
+                                                            <button type="submit" name="deleteListBtn" class="btn btn-danger" id="deleteListBtn" data-list-id="<?= $list['id'] ?>">Supprimer</button>
+                                                            <input type="hidden" name="postId" value="<?= $list['id'] ?>">
                                                         </div>
-                                                        <input type="hidden" name="postId" value="<?= $list['id'] ?>">
                                                     </td>
                                                 </tr>
                                         <?php endforeach;
