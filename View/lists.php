@@ -4,7 +4,6 @@ session_start();
 
 use App\Controllers\UserController;
 use App\Controllers\ListController;
-use App\Models\ListModel;
 
 $userController = new UserController();
 
@@ -13,16 +12,18 @@ if (isset($_GET['logOut'])) {
     die();
 }
 
-$taskModel = new ListModel();
-$result = $taskModel->getUserLists($_SESSION['user']->getId());
-var_dump($result);
-var_dump($_SESSION['user']);
+$listController = new ListController();
 
-if (isset($_POST['submitList'])) {
-    $taskController = new ListController();
-    $taskController->addNewList($_POST['newList'], $_SESSION['user']->getId());
-    var_dump($taskController->addNewList($_POST['newList'], $_SESSION['user']->getId()));
+if ($_SESSION['user']) {
+    $result = $listController->displayUserLists($_SESSION['user']->getId());
 }
+
+$newListName = $_POST['newList'];
+$listValidation = $listController->checkIfExists($newListName);
+if (isset($_POST['submitList']) && (!$listValidation)) {
+    $listController->addNewList($newListName, $_SESSION['user']->getId());
+}
+
 
 ?>
 

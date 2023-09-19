@@ -7,7 +7,22 @@ use App\Models\ListModel;
 class ListController
 {
     private $list;
+    private $result;
+    
+    public function checkIfExists($listName): bool
+    {
+        $lists = new ListModel();
+        $idUser = $_SESSION['user']->getId();
+        $userLists = $lists->getUserLists($idUser);
 
+        foreach ($userLists as $list) {
+            if ($list['name'] == $listName) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public function addNewList(string $name, int $idUser)
     {
         if (!$this->checkIfExists($_POST['newList'])) {
@@ -19,17 +34,12 @@ class ListController
         }
     }
 
-    public function checkIfExists($listName): bool
-    {
-        $lists = new ListModel();
-        $idUser = $_SESSION['user']->getId();
-        $userLists = $lists->getUserLists($idUser);
+    function displayUserLists(int $idUser) : array {
 
-        foreach ($userLists as $list) {
-            if ($list['name'] === $listName) {
-                return true;
-            }
-        }
-        return false;
+        $userLists = new ListModel();
+        $result = $userLists->getUserLists($idUser);
+
+        return $result;
     }
+
 }

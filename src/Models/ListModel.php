@@ -115,8 +115,9 @@ class ListModel
 
         $lists = $check->fetchAll(PDO::FETCH_ASSOC);
 
-        return $lists;
-    }
+        if (empty($lists)) {
+            return null;
+        } else return $lists;    }
 
 
 
