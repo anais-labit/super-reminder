@@ -5,7 +5,7 @@ namespace App\Models;
 use DateTime;
 use PDO;
 
-class TaskModel
+class ListModel
 {
     private ?int $id;
     private ?int $idUser;
@@ -32,7 +32,7 @@ class TaskModel
         return $conn->connect();
     }
 
-    public function setId(?int $id): TaskModel
+    public function setId(?int $id): ListModel
     {
         $this->id = $id;
         return $this;
@@ -42,7 +42,7 @@ class TaskModel
         return $this->id;
     }
 
-    public function setIdUser(?string $idUser): TaskModel
+    public function setIdUser(?string $idUser): ListModel
     {
         $this->idUser = $idUser;
         return $this;
@@ -52,7 +52,7 @@ class TaskModel
         return $this->idUser;
     }
 
-    public function setName(?string $name): TaskModel
+    public function setName(?string $name): ListModel
     {
         $this->name = $name;
         return $this;
@@ -62,7 +62,7 @@ class TaskModel
         return $this->name;
     }
 
-    public function setDate(?string $date): TaskModel
+    public function setDate(?string $date): ListModel
     {
         $this->date = $date;
         return $this;
@@ -72,7 +72,7 @@ class TaskModel
         return $this->date;
     }
 
-    public function setDueDate(?string $dueDate): TaskModel
+    public function setDueDate(?string $dueDate): ListModel
     {
         $this->dueDate = $dueDate;
         return $this;
@@ -82,7 +82,7 @@ class TaskModel
         return $this->dueDate;
     }
 
-    public function setTagName(?string $tagName): TaskModel
+    public function setTagName(?string $tagName): ListModel
     {
         $this->tagName = $tagName;
         return $this;
@@ -92,7 +92,7 @@ class TaskModel
         return $this->tagName;
     }
 
-    public function setIdList(?int $idList): TaskModel
+    public function setIdList(?int $idList): ListModel
     {
         $this->idList = $idList;
         return $this;

@@ -3,8 +3,8 @@ require_once '../vendor/autoload.php';
 session_start();
 
 use App\Controllers\UserController;
-use App\Controllers\TaskController;
-use App\Models\TaskModel;
+use App\Controllers\ListController;
+use App\Models\ListModel;
 
 $userController = new UserController();
 
@@ -13,12 +13,13 @@ if (isset($_GET['logOut'])) {
     die();
 }
 
-$taskModel = new TaskModel();
+$taskModel = new ListModel();
 $result = $taskModel->getUserLists($_SESSION['user']->getId());
 var_dump($result);
+var_dump($_SESSION['user']);
 
 if (isset($_POST['submitList'])) {
-    $taskController = new TaskController();
+    $taskController = new ListController();
     $taskController->addNewList($_POST['newList'], $_SESSION['user']->getId());
     var_dump($taskController->addNewList($_POST['newList'], $_SESSION['user']->getId()));
 }
@@ -50,7 +51,7 @@ if (isset($_POST['submitList'])) {
             </form>
         </div>
         <div id="listsContainer">
-            <h1 class="text-center">Liste des tâches</h1>
+            <h1 class="text-center">Mes listes</h1>
             <div class="row">
                 <div class="col">
                     <table class="table table-bordered">
