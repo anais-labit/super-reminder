@@ -4,7 +4,9 @@ session_start();
 
 use App\Controllers\UserController;
 use App\Controllers\ListController;
+use App\Controllers\TaskController;
 use App\Models\ListModel;
+use App\Models\TaskModel;
 
 $userController = new UserController();
 
@@ -13,15 +15,32 @@ if (isset($_GET['logOut'])) {
     die();
 }
 
-$taskModel = new ListModel();
-$result = $taskModel->getUserLists($_SESSION['user']->getId());
-var_dump($result);
+$listModel = new ListModel();
+$resultList = $listModel->getUserLists($_SESSION['user']->getId());
+var_dump($resultList);
 var_dump($_SESSION['user']);
 
 if (isset($_POST['submitList'])) {
-    $taskController = new ListController();
-    $taskController->addNewList($_POST['newList'], $_SESSION['user']->getId());
-    var_dump($taskController->addNewList($_POST['newList'], $_SESSION['user']->getId()));
+    $listController = new ListController();
+    $listController->addNewList($_POST['newList'], $_SESSION['user']->getId());
+    var_dump($listController->addNewList($_POST['newList'], $_SESSION['user']->getId()));
+}
+
+// vérifie si utilisateur connecté.
+if (isset($_SESSION['user'])) {
+    
+    // récupérer les tâches.
+    $taskModel = new TaskModel();
+    $resultTask = $taskModel->getUserTasks($_SESSION['user']->getId());
+    var_dump($resultTask);
+    var_dump($_SESSION['user']);
+
+    // si bouton submitTask est cliqué alors ajouter la tâche.
+    if(isset($_POST['submitTask'])) {
+        $taskController = new TaskController();
+        $taskController->addNewTask($_POST['newTask'], $_SESSION['user']->getId());
+        var_dump($taskController->addNewTask($_POST['newTask'], $_SESSION['user']->getId()));
+    }
 }
 
 ?>
@@ -56,16 +75,31 @@ if (isset($_POST['submitList'])) {
                 <div class="col">
                     <table class="table table-bordered">
                         <tbody>
-                            <?php foreach ($result as $task) : ?>
+                            <?php foreach ($result as $list) : ?>
                                 <tr>
                                     <td class="table-primary">
-                                        <h4><?= $task['name'] ?></h4>
+                                        <h4><?= $list['name'] ?></h4>
                                         <button type="submit" class="btn btn-primary" id="list<?= $task['id'] ?>">voir +</button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+
+                    <!-- Tableau pour afficher les tâches de chaque liste -->
+                    <table class="table table-bordered">
+                        <tbody>
+                            <?php foreach ($result as $task) : ?>
+                                <tr>
+                                    <td class="table-primary">
+                                        <h4><?= $task['name'] ?></h4>
+                                        <button type="submit" name="submitTask" class="btn btn-primary" id="task<?= $task['id'] ?>">voir +</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
         </div>
