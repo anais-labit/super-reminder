@@ -17,6 +17,9 @@ $listController = new ListController();
 if ($_SESSION['user']) {
     $result = $listController->displayUserLists($_SESSION['user']->getId());
 }
+if ($result === null) {
+    $result = [];
+}
 
 if (isset($_POST['submitAddListForm'])) {
     $newListName = $_POST['newList'];
@@ -40,7 +43,7 @@ if (isset($_POST['submitDeleteListForm'])) {
     <title>Super-Reminder</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
-
+    <script src="https://kit.fontawesome.com/427958ed2f.js" crossorigin="anonymous"></script>
     <script defer src="./javascript/create.js"></script>
     <!-- <script defer src="./javascript/update.js"></script> -->
     <script defer src="./javascript/delete.js"></script>
@@ -60,7 +63,7 @@ if (isset($_POST['submitDeleteListForm'])) {
                         <div class="input-group">
                             <input type="text" class="form-control" id="newList" name="newList" placeholder="Ajouter une liste">
                             <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary" name="addListBtn" id="addListBtn">+</button>
+                                <button type="submit" class="btn btn-primary" name="addListBtn" id="addListBtn"><i class="fa-solid fa-plus"></i></button>
                             </div>
                         </div>
                     </form>
@@ -70,25 +73,27 @@ if (isset($_POST['submitDeleteListForm'])) {
                         <div class="col">
                             <table class="table table-bordered">
                                 <tbody>
-                                    <?php
-                                    if (!empty($result)) {
+                                    <?php if ($result == null) {
+                                        $result = [];
+                                    } else if (!empty($result)) {
                                         foreach ($result as $list) : ?>
                                             <tr>
                                                 <td class="table-primary">
                                                     <h4><?= ucwords($list['name']) ?></h4>
                                                     <div class="btn-group" role="group">
                                                         <form action="" method="POST">
-                                                            <button type="submit" name="openListBtn" class="btn btn-primary" id="openListBtn<?= $list['id'] ?>">Voir +</button>
+                                                            <button type="submit" name="openListBtn" class="btn btn-primary" id="openListBtn<?= $list['id'] ?>"><i class="fa-regular fa-folder-open"></i></button>
                                                         </form>
-                                                        <form action="" method="POST" id="deleteListForm">
-                                                            <button type="submit" name="deleteListBtn" class="btn btn-danger" id="deleteListBtn" data-list-id="<?= $list['id'] ?>">Supprimer</button>
+                                                        <form action="" method="POST" class="deleteListForm">
+                                                            <button type="submit" name="deleteListBtn" class="btn btn-danger deleteListBtn" data-list-id="<?= $list['id'] ?>"><i class="fa-solid fa-trash"></i></button>
                                                             <input type="hidden" name="postId" value="<?= $list['id'] ?>">
                                                         </form>
                                                     </div>
                                                 </td>
                                             </tr>
                                     <?php endforeach;
-                                    } ?>
+                                    }
+                                    ?>
                                 </tbody>
                             </table>
                         </div>

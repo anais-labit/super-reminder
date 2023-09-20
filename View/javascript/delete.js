@@ -40,30 +40,35 @@ displayDeleteUserMessage();
 async function displayDeleteListMessage() {
   try {
     if (window.location.href.endsWith("lists.php")) {
-      const response = await fetch("lists.php");
-      const content = await response.text();
+      const deleteListButtons = document.querySelectorAll(".deleteListBtn");
 
-      const deleteListBtn = document.querySelector("#deleteListBtn");
-      const form = document.querySelector("#deleteListForm");
+      deleteListButtons.forEach((deleteListBtn) => {
+        deleteListBtn.addEventListener("click", async function (event) {
+          event.preventDefault();
 
-      deleteListBtn.addEventListener("click", async function (event) {
-        event.preventDefault();
-        const data = new FormData(form);
-        data.append("submitDeleteListForm", "");
+          const listId = deleteListBtn.getAttribute("data-list-id");
 
-        const response = await fetch("lists.php", {
-          method: "POST",
-          body: data,
+          const formData = new FormData();
+          formData.append("submitDeleteListForm", "");
+          formData.append("postId", listId);
+
+          const response = await fetch("lists.php", {
+            method: "POST",
+            body: formData,
+          });
+
+          const jsonResponse = await response.json();
+
+          const container = document.querySelector("#message");
+          container.textContent = jsonResponse.message;
+
+          if (jsonResponse.message == "La liste a bien été supprimée.") {
+            container.setAttribute("class", "alert alert-success");
+            setTimeout(function () {
+              window.location.href = "lists.php";
+            }, 1300);
+          }
         });
-
-        const jsonResponse = await response.json();
-
-        const container = document.querySelector("#message");
-        container.textContent = jsonResponse.message;
-
-        if (jsonResponse.message == "La liste a bien été supprimée.") {
-          container.setAttribute("class", "alert alert-success");
-        }
       });
     }
   } catch (error) {

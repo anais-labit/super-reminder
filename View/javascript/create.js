@@ -68,6 +68,9 @@ async function displayAddTaskMessage() {
 
         if (jsonResponse.message == "Votre liste a bien été créée.") {
           container.setAttribute("class", "alert alert-success");
+          setTimeout(function () {
+            window.location.href = "lists.php";
+          }, 1300);
         } else if (jsonResponse.message == "Cette liste existe déjà.") {
           container.setAttribute("class", "alert alert-danger");
         }
