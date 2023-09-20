@@ -43,8 +43,10 @@ class ListController
     {
         $userLists = new ListModel();
         $result = $userLists->getUserLists($idUser);
+
         return $result;
     }
+
 
     function deleteList(int $idList, int $idUser): void
     {
