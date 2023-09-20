@@ -67,23 +67,25 @@ if (isset($_POST['deleteListBtn'])) {
                         <div class="col">
                             <table class="table table-bordered">
                                 <tbody>
-                                    <form action="" method="POST">
-                                        <?php
-                                        if (!empty($result)) {
-                                            foreach ($result as $list) : ?>
-                                                <tr>
-                                                    <td class="table-primary">
-                                                        <h4><?= ucwords($list['name']) ?></h4>
-                                                        <div class="btn-group" role="group">
+                                    <?php
+                                    if (!empty($result)) {
+                                        foreach ($result as $list) : ?>
+                                            <tr>
+                                                <td class="table-primary">
+                                                    <h4><?= ucwords($list['name']) ?></h4>
+                                                    <div class="btn-group" role="group">
+                                                        <form action="" method="POST">
                                                             <button type="submit" name="openListBtn" class="btn btn-primary" id="openListBtn<?= $list['id'] ?>">Voir +</button>
+                                                        </form>
+                                                        <form action="" method="POST" id="deleteListForm">
                                                             <button type="submit" name="deleteListBtn" class="btn btn-danger" id="deleteListBtn" data-list-id="<?= $list['id'] ?>">Supprimer</button>
                                                             <input type="hidden" name="postId" value="<?= $list['id'] ?>">
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                        <?php endforeach;
-                                        } ?>
-                                    </form>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                    <?php endforeach;
+                                    } ?>
                                 </tbody>
                             </table>
                         </div>
