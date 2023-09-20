@@ -37,4 +37,38 @@ async function displayDeleteUserMessage() {
 
 displayDeleteUserMessage();
 
-async function displayDeleteListMessage() {}
+async function displayDeleteListMessage() {
+  try {
+    if (window.location.href.endsWith("lists.php")) {
+      const response = await fetch("lists.php");
+      const content = await response.text();
+
+      const deleteListBtn = document.querySelector("#deleteListBtn");
+      const form = document.querySelector("#deleteListForm");
+
+      deleteListBtn.addEventListener("click", async function (event) {
+        event.preventDefault();
+        const data = new FormData(form);
+        data.append("submitDeleteListForm", "");
+
+        const response = await fetch("lists.php", {
+          method: "POST",
+          body: data,
+        });
+
+        const jsonResponse = await response.json();
+
+        const container = document.querySelector("#message");
+        container.textContent = jsonResponse.message;
+
+        if (jsonResponse.message == "La liste a bien été supprimée.") {
+          container.setAttribute("class", "alert alert-success");
+        }
+      });
+    }
+  } catch (error) {
+    console.error("Une erreur s'est produite :", error);
+  }
+}
+
+displayDeleteListMessage();

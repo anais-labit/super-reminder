@@ -18,13 +18,15 @@ if ($_SESSION['user']) {
     $result = $listController->displayUserLists($_SESSION['user']->getId());
 }
 
-if (isset($_POST['submitListBtn'])) {
+if (isset($_POST['submitAddListForm'])) {
     $newListName = $_POST['newList'];
     $listController->addNewList($newListName, $_SESSION['user']->getId());
+    die();
 }
 
-if (isset($_POST['deleteListBtn'])) {
+if (isset($_POST['submitDeleteListForm'])) {
     $listController->deleteList($_POST['postId'], $_SESSION['user']->getId());
+    die();
 }
 
 ?>
@@ -38,8 +40,9 @@ if (isset($_POST['deleteListBtn'])) {
     <title>Super-Reminder</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
+
     <script defer src="./javascript/create.js"></script>
-    <script defer src="./javascript/update.js"></script>
+    <!-- <script defer src="./javascript/update.js"></script> -->
     <script defer src="./javascript/delete.js"></script>
 </head>
 
@@ -57,7 +60,7 @@ if (isset($_POST['deleteListBtn'])) {
                         <div class="input-group">
                             <input type="text" class="form-control" id="newList" name="newList" placeholder="Ajouter une liste">
                             <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary" name="submitListBtn" id="submitListBtn">+</button>
+                                <button type="submit" class="btn btn-primary" name="addListBtn" id="addListBtn">+</button>
                             </div>
                         </div>
                     </form>
