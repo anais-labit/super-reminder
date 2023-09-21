@@ -4,6 +4,8 @@ session_start();
 
 use App\Controllers\UserController;
 use App\Controllers\ListController;
+use App\Controllers\TaskController;
+
 
 $userController = new UserController();
 
@@ -29,6 +31,15 @@ if (isset($_POST['submitDeleteListForm'])) {
     $listController->deleteList($_POST['postId'], $_SESSION['user']->getId());
     die();
 }
+
+$taskController = new TaskController();
+
+if (isset($_POST['addTaskBtn'])) {
+    $taskController->addNewTask(($_POST['newTaskName']), $_POST['dueDateNewTask'], $_POST['postId']);
+    die();
+}
+
+
 
 ?>
 
@@ -76,15 +87,23 @@ if (isset($_POST['submitDeleteListForm'])) {
                                             <tr>
                                                 <td class="table-primary">
                                                     <h4><?= ucwords($list['name']) ?></h4>
+                                                    <form action="" method="POST" class="deleteListForm">
+                                                        <button type="submit" name="deleteListBtn" class="btn btn-danger deleteListBtn" data-list-id="<?= $list['id'] ?>"><i class="fa-solid fa-trash"></i></button>
+                                                        <input type="hidden" name="postId" value="<?= $list['id'] ?>">
+                                                    </form>
                                                     <div class="btn-group" role="group">
-                                                        <form action="" method="POST">
-                                                            <button type="submit" name="openListBtn" class="btn btn-primary" id="openListBtn<?= $list['id'] ?>"><i class="fa-regular fa-folder-open"></i></button>
-                                                        </form>
-                                                        <form action="" method="POST" class="deleteListForm">
-                                                            <button type="submit" name="deleteListBtn" class="btn btn-danger deleteListBtn" data-list-id="<?= $list['id'] ?>"><i class="fa-solid fa-trash"></i></button>
+                                                        <form action="" method="POST" class="addTaskForm">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control" id="newTaskName" name="newTaskName" placeholder="Ajouter une tâche">
+                                                                <input type="date" class="form-control" id="dueDateNewTask" name="dueDateNewTask">
+                                                                <div class="input-group-append">
+                                                                    <button type="submit" name="addTaskBtn" class="btn btn-primary addTaskBtn" addTaskBtn data-list-id="<?= $list['id'] ?>">+</button>
+                                                                </div>
+                                                            </div>
                                                             <input type="hidden" name="postId" value="<?= $list['id'] ?>">
                                                         </form>
                                                     </div>
+                                                    <div id="tasksContainer-<?= $list['id'] ?>"></div>
                                                 </td>
                                             </tr>
                                     <?php
