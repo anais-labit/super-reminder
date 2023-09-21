@@ -1,5 +1,5 @@
 {
-  "name": "anais/module-connexion-b2",
+  "name": "anais/super-reminder",
   "autoload": {
     "psr-4": {
       "App\\": "src/"

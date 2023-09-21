@@ -15,11 +15,9 @@ if (isset($_GET['logOut'])) {
 $listController = new ListController();
 
 if ($_SESSION['user']) {
-    $result = $listController->displayUserLists($_SESSION['user']->getId());
+    $lists = $listController->displayUserLists($_SESSION['user']->getId());
 }
-if ($result === null) {
-    $result = [];
-}
+
 
 if (isset($_POST['submitAddListForm'])) {
     $newListName = $_POST['newList'];
@@ -73,10 +71,8 @@ if (isset($_POST['submitDeleteListForm'])) {
                         <div class="col">
                             <table class="table table-bordered">
                                 <tbody>
-                                    <?php if ($result == null) {
-                                        $result = [];
-                                    } else if (!empty($result)) {
-                                        foreach ($result as $list) : ?>
+                                    <?php if (isset($lists)) {
+                                        foreach ($lists as $list) : ?>
                                             <tr>
                                                 <td class="table-primary">
                                                     <h4><?= ucwords($list['name']) ?></h4>
@@ -91,7 +87,8 @@ if (isset($_POST['submitDeleteListForm'])) {
                                                     </div>
                                                 </td>
                                             </tr>
-                                    <?php endforeach;
+                                    <?php
+                                        endforeach;
                                     }
                                     ?>
                                 </tbody>

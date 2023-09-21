@@ -24,14 +24,20 @@ class ListController
 
     public function addNewList(string $name, int $idUser): void
     {
-        if (!$this->checkIfExists($_POST['newList'])) {
-            $listModel = new ListModel();
+        $listModel = new ListModel();
+
+        if (!$this->checkIfExists($name) && !empty($name)) {
             $listModel->createList($name, $idUser);
             echo json_encode([
                 "success" => true,
                 "message" => "Votre liste a bien été créée."
             ]);
-        } else if ($this->checkIfExists($_POST['newList'])) {
+        } elseif (empty($name)) {
+            echo json_encode([
+                "success" => false,
+                "message" => "La liste doit porter un nom."
+            ]);
+        } else {
             echo json_encode([
                 "success" => false,
                 "message" => "Cette liste existe déjà."
@@ -39,12 +45,14 @@ class ListController
         }
     }
 
+
     function displayUserLists(int $idUser): ?array
     {
         $userLists = new ListModel();
         $result = $userLists->getUserLists($idUser);
 
         return $result;
+
     }
 
 

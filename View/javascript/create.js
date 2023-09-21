@@ -71,7 +71,7 @@ async function displayAddTaskMessage() {
           setTimeout(function () {
             window.location.href = "lists.php";
           }, 1300);
-        } else if (jsonResponse.message == "Cette liste existe déjà.") {
+        } else {
           container.setAttribute("class", "alert alert-danger");
         }
       });

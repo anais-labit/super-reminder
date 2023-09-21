@@ -23,36 +23,6 @@ class ListModel
         return $conn->connect();
     }
 
-    // public function setId(?int $id): ListModel
-    // {
-    //     $this->id = $id;
-    //     return $this;
-    // }
-    // public function getId(): ?int
-    // {
-    //     return $this->id;
-    // }
-
-    // public function setName(?string $name): ListModel
-    // {
-    //     $this->name = $name;
-    //     return $this;
-    // }
-    // public function getName(): string
-    // {
-    //     return $this->name;
-    // }
-
-    // public function setIdUser(?string $idUser): ListModel
-    // {
-    //     $this->idUser = $idUser;
-    //     return $this;
-    // }
-    // public function getIdUser(): int
-    // {
-    //     return $this->idUser;
-    // }
-
     public function getUserLists($idUser): ?array
     {
         $query = 'SELECT list.id, list.name
@@ -66,8 +36,8 @@ class ListModel
 
         $lists = $check->fetchAll(PDO::FETCH_ASSOC);
 
-        if (empty($lists)) {
-            return null;
+        if (!isset($lists)) {
+            return [];
         } else return $lists;
     }
 
