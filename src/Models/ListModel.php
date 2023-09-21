@@ -118,8 +118,6 @@ class ListModel
         return $lists;
     }
 
-
-
     public function createList(string $name, int $idUser): void
     {
         $createList = $this->connectDb()->prepare('INSERT INTO list (name, id_user) VALUES (:name, :id_user)');
