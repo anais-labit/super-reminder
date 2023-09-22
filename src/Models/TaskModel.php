@@ -40,4 +40,17 @@ class TaskModel
         $createList->bindValue(':status', 0);
         $createList->execute();
     }
+
+    public function getListTasks(int $idList): ?array
+    {
+        $getTasks = $this->connectDb()->prepare('SELECT * FROM task WHERE id_list = :id_list ');
+        $getTasks->bindValue(':id_list', $idList);
+        $getTasks->execute();
+
+        $tasks = $getTasks->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!isset($tasks)) {
+            return [];
+        } else return $tasks;
+    }
 }

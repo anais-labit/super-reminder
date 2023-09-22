@@ -23,6 +23,10 @@ class ListModel
         return $conn->connect();
     }
 
+    
+
+
+
     public function getUserLists($idUser): ?array
     {
         $query = 'SELECT list.id, list.name

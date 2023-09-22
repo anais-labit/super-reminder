@@ -14,10 +14,13 @@ if (isset($_GET['logOut'])) {
     die();
 }
 
+
+
 $listController = new ListController();
 
 if ($_SESSION['user']) {
     $lists = $listController->displayUserLists($_SESSION['user']->getId());
+    var_dump($lists);
 }
 
 
@@ -94,8 +97,9 @@ if (isset($_POST['addTaskBtn'])) {
                                                     <div class="btn-group" role="group">
                                                         <form action="" method="POST" class="addTaskForm">
                                                             <div class="input-group">
-                                                                <input type="text" class="form-control" id="newTaskName" name="newTaskName" placeholder="Ajouter une tâche">
-                                                                <input type="date" class="form-control" id="dueDateNewTask" name="dueDateNewTask">
+                                                                <input type="text" class="form-control" id="newTaskName-<?= $list['id'] ?>" name="newTaskName-<?= $list['id'] ?>" placeholder="Ajouter une tâche">
+                                                                <input type="date" class="form-control" id="dueDateNewTask-<?= $list['id'] ?>" name="dueDateNewTask-<?= $list['id'] ?>">
+
                                                                 <div class="input-group-append">
                                                                     <button type="submit" name="addTaskBtn" class="btn btn-primary addTaskBtn" addTaskBtn data-list-id="<?= $list['id'] ?>">+</button>
                                                                 </div>

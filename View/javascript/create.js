@@ -83,37 +83,100 @@ async function displayAddTaskMessage() {
 
 displayAddTaskMessage();
 
-async function createTasksContainer() {
-  const openListButtons = document.querySelectorAll(".addTaskBtn");
+// async function createTasksContainer() {
+//   const openListButtons = document.querySelectorAll(".addTaskBtn");
 
-  openListButtons.forEach((button) => {
-    button.addEventListener("click", function (event) {
-      // event.preventDefault();
-      const listId = button.getAttribute("data-list-id");
-      const tasksContainer = document.querySelector(
-        `#tasksContainer-${listId}`
-      );
+//   openListButtons.forEach((button) => {
+//     button.addEventListener("click", function (event) {
+//       // event.preventDefault();
+//       const listId = button.getAttribute("data-list-id");
+//       const tasksContainer = document.querySelector(
+//         `#tasksContainer-${listId}`
+//       );
 
-      const task = document.createElement("p");
-      task.textContent = "ma super tâche";
-      tasksContainer.appendChild(task);
+//       const task = document.createElement("p");
+//       task.textContent = "ma super tâche";
+//       tasksContainer.appendChild(task);
 
-      console.log(task.value);
+//       console.log(task.value);
 
-      const taskDueDate = document.createElement('span');
-      taskDueDate.textContent = "Due date :"
-      task.appendChild(taskDueDate);
+//       const taskDueDate = document.createElement('span');
+//       taskDueDate.textContent = "Due date :"
+//       task.appendChild(taskDueDate);
 
-      const deleteTaskBtn = document.createElement("button");
-      deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
-      task.appendChild(deleteTaskBtn);
+//       const deleteTaskBtn = document.createElement("button");
+//       deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
+//       task.appendChild(deleteTaskBtn);
 
-      const taskStatus = document.createElement("input");
-      taskStatus.type = "checkbox";
-      task.appendChild(taskStatus);
+//       const taskStatus = document.createElement("input");
+//       taskStatus.type = "checkbox";
+//       task.appendChild(taskStatus);
 
+//     });
+//   });
+// }
+
+// createTasksContainer();
+
+async function displayAndCreateTasks() {
+  if (window.location.href.endsWith("lists.php")) {
+    const addTaskBtns = document.querySelectorAll(".addTaskBtn");
+
+    addTaskBtns.forEach((button) => {
+      button.addEventListener("click", async function (event) {
+        event.preventDefault();
+
+        const listId = button.getAttribute("data-list-id");
+        const tasksContainer = document.querySelector(
+          `#tasksContainer-${listId}`
+        );
+        const newTaskNameInput = document.querySelector(
+          `#newTaskName-${listId}`
+        );
+        const dueDateNewTaskInput = document.querySelector(
+          `#dueDateNewTask-${listId}`
+        );
+        const newTaskName = newTaskNameInput.value;
+        const dueDateNewTask = dueDateNewTaskInput.value;
+
+        if (newTaskName.trim() == "") {
+          alert("Le nom de la tâche ne peut pas être vide.");
+          return;
+        }
+
+        const formData = new FormData();
+        const response = await fetch("lists.php", {
+          method: "POST",
+          body: formData,
+        });
+
+        const jsonResponse = await response.json();
+
+        const container = document.querySelector("#message");
+        container.textContent = jsonResponse.message;
+
+        if (jsonResponse.message == "La tâche a bien été ajoutée.") {
+          const task = document.createElement("p");
+          task.textContent = newTaskName;
+          tasksContainer.appendChild(task);
+
+          const taskDueDate = document.createElement("span");
+          taskDueDate.textContent = "Due date : " + dueDateNewTask;
+          task.appendChild(taskDueDate);
+
+          const deleteTaskBtn = document.createElement("button");
+          deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
+          task.appendChild(deleteTaskBtn);
+
+          const taskStatus = document.createElement("input");
+          taskStatus.type = "checkbox";
+          task.appendChild(taskStatus);
+        }
+
+        
+      });
     });
-  });
+  }
 }
 
-createTasksContainer();
+displayAndCreateTasks();
