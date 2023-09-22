@@ -20,6 +20,7 @@ if (isset($_POST['submitForm']) && (!empty($_POST['password']))) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="icon" href="./css/to-do-list.png" type="image/x-icon"/>
     <script defer src="./javascript/read.js"></script>
     <title>Super-Reminder</title>
 </head>

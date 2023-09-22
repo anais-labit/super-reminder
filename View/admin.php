@@ -25,6 +25,7 @@ if ($userController->validateAdminRole()) {
     <title>Super-Reminder</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="icon" href="./css/to-do-list.png" type="image/x-icon"/>
 </head>
 
 <body>

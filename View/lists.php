@@ -41,6 +41,7 @@ if (isset($_POST['submitDeleteListForm'])) {
     <title>Super-Reminder</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="icon" href="./css/to-do-list.png" type="image/x-icon"/>
     <script src="https://kit.fontawesome.com/427958ed2f.js" crossorigin="anonymous"></script>
     <script defer src="./javascript/create.js"></script>
     <!-- <script defer src="./javascript/update.js"></script> -->

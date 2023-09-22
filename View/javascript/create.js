@@ -11,6 +11,7 @@ async function displayRegisterUserMessage() {
         event.preventDefault();
         const data = new FormData(form);
         data.append("submitForm", "");
+        ''
 
         const response = await fetch("inscription.php", {
           method: "POST",

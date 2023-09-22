@@ -1,6 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;700&display=swap');
+
+body {
+  background-color: #8758ff;
+}
+
+p, li {
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  color: white !important;
+}
+
+h1, h2, h5 {
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  color: white;
+}
+
+a {
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+}
+
 .login-form {
   width: 340px;
   margin: 50px auto;
+}
+
+.login-form h2 {
+  color: #1A1A40;
 }
 
 .login-form form {
@@ -41,6 +68,93 @@ body {
 
 footer {
   flex-shrink: 0;
+  padding: 20px 5px;
 }
 
+.bg-dark {
+  background-color: #1A1A40 !important;
+}
 
+.container {
+  padding: 20px 5px;
+}
+
+.nav-item {
+  display: flex !important;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: row !important;
+}
+
+a.nav-link {
+  margin-right: 10px;
+  color: white !important;
+  transition: 0.5s;
+}
+
+.nav-link:hover {
+  color: #8758ff !important;
+}
+
+.footer {
+  padding: 15px 5px;
+}
+
+.git a {
+  color: white;
+  background-color: #8758ff;;
+  padding: 5px 10px;
+  border-radius: 2px;
+  transition: 0.5s;
+}
+
+.git a:hover {
+  color: #8758ff;;
+  text-decoration: none;
+  background-color: white;
+}
+
+.btn.btn-primary {
+  background-color: #1A1A40;
+  border: none;
+  transition: 0.5s;
+  margin-right: 5px;
+}
+
+.btn.btn-primary:hover {
+  background-color: #8758ff;
+}
+
+.table-primary {
+  background-color: #D9DCE4 !important;
+  padding: 25px !important;
+  margin-bottom: 10px;
+}
+
+.table-primary td {
+  margin-bottom: 10px;
+}
+
+input {
+  font-family: 'Lato', 'sans-serif';
+}
+
+.form-control {
+  border: 1px solid #1A1A40;
+}
+
+.input-group {
+  margin-bottom: 10px;
+}
+
+.table-bordered td, .table-bordered th {
+  border-bottom: 2px solid #8758ff;
+}
+
+.form-label {
+  color: white;
+}
+
+.alert-danger p {
+  color: #1A1A40 !important;
+}
