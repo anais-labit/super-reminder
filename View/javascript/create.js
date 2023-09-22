@@ -42,7 +42,7 @@ async function displayRegisterUserMessage() {
 
 displayRegisterUserMessage();
 
-async function displayAddTaskMessage() {
+async function displayAddListMessage() {
   try {
     if (window.location.href.endsWith("lists.php")) {
       const response = await fetch("lists.php");
@@ -81,44 +81,9 @@ async function displayAddTaskMessage() {
   }
 }
 
-displayAddTaskMessage();
+displayAddListMessage();
 
-// async function createTasksContainer() {
-//   const openListButtons = document.querySelectorAll(".addTaskBtn");
-
-//   openListButtons.forEach((button) => {
-//     button.addEventListener("click", function (event) {
-//       // event.preventDefault();
-//       const listId = button.getAttribute("data-list-id");
-//       const tasksContainer = document.querySelector(
-//         `#tasksContainer-${listId}`
-//       );
-
-//       const task = document.createElement("p");
-//       task.textContent = "ma super tâche";
-//       tasksContainer.appendChild(task);
-
-//       console.log(task.value);
-
-//       const taskDueDate = document.createElement('span');
-//       taskDueDate.textContent = "Due date :"
-//       task.appendChild(taskDueDate);
-
-//       const deleteTaskBtn = document.createElement("button");
-//       deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
-//       task.appendChild(deleteTaskBtn);
-
-//       const taskStatus = document.createElement("input");
-//       taskStatus.type = "checkbox";
-//       task.appendChild(taskStatus);
-
-//     });
-//   });
-// }
-
-// createTasksContainer();
-
-async function displayAndCreateTasks() {
+async function addTasksAndDisplaySuccessMessage() {
   if (window.location.href.endsWith("lists.php")) {
     const addTaskBtns = document.querySelectorAll(".addTaskBtn");
 
@@ -162,7 +127,7 @@ async function displayAndCreateTasks() {
           tasksContainer.appendChild(task);
 
           const taskDueDate = document.createElement("span");
-          taskDueDate.textContent = "Due date : " + dueDateNewTask;
+          taskDueDate.textContent = " Due date : " + dueDateNewTask;
           task.appendChild(taskDueDate);
 
           const deleteTaskBtn = document.createElement("button");
@@ -178,6 +143,6 @@ async function displayAndCreateTasks() {
   }
 }
 
-displayAndCreateTasks();
+addTasksAndDisplaySuccessMessage();
 
 

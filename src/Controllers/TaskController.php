@@ -38,23 +38,9 @@ class TaskController
 
         $listTasks = new TaskModel();
         $result = $listTasks->getListTasks($idList);
-        // echo json_encode([$result])
 
         return $result;
-        
     }
 
 
-    public function checkIfExists($taskName): bool
-    {
-        $tasks = new TaskModel();
-        $listTasks = $tasks->getListTasks($idList);
-
-        foreach ($listTasks as $task) {
-            if (strtolower($task['name']) == strtolower($taskName)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

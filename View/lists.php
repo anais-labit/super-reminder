@@ -6,7 +6,6 @@ use App\Controllers\UserController;
 use App\Controllers\ListController;
 use App\Controllers\TaskController;
 
-
 $userController = new UserController();
 $listController = new ListController();
 $taskController = new TaskController();
@@ -18,9 +17,7 @@ if (isset($_GET['logOut'])) {
 
 if ($_SESSION['user']) {
     $lists = $listController->displayUserLists($_SESSION['user']->getId());
-    // var_dump($lists);
 }
-
 
 if (isset($_POST['submitAddListForm'])) {
     $newListName = $_POST['newList'];
@@ -33,16 +30,10 @@ if (isset($_POST['submitDeleteListForm'])) {
     die();
 }
 
-// if (isset($_POST['openListBtn'])) {
-//     $taskController->displayListTasks($idList);
-// }
-
 if (isset($_POST['addTaskBtn'])) {
     $taskController->addNewTask(($_POST['newTaskName']), $_POST['dueDateNewTask'], $_POST['postId']);
     die();
 }
-
-
 
 ?>
 
@@ -94,19 +85,23 @@ if (isset($_POST['addTaskBtn'])) {
                                                         <button type="submit" name="deleteListBtn" class="btn btn-danger deleteListBtn" data-list-id="<?= $list['id'] ?>"><i class="fa-solid fa-trash"></i></button>
                                                         <input type="hidden" name="postId" value="<?= $list['id'] ?>">
                                                     </form>
-                                                    <form action="votre_script_php_pour_recuperer_taches.php" method="post" class="openListForm">
-                                                        <button type="submit" name="openListBtn" class="btn btn-primary openListBtn" data-list-id="<?= $list['id'] ?>">Voir +</button>
-                                                        <div id="tasksContainer-<?= $list['id'] ?>">
-                                                            <!-- Les tâches seront chargées dynamiquement ici -->
-                                                        </div>
-                                                    </form>
+                                                    <div id="tasksContainer-<?= $list['id'] ?>">
+                                                        <?php
+                                                        $tasks = $taskController->displayListTasks($list['id']);
+                                                        foreach ($tasks as $task) : ?>
+                                                            <p> <?= $task['name'] ?>
+                                                                <span> Due date : <?= $task['due_date'] ?></span>
+                                                                <button><i class="fa-solid fa-trash"></i>
+                                                                </button><input type="checkbox">
+                                                            </p>
+                                                        <?php endforeach; ?>
+                                                    </div>
 
                                                     <div class="btn-group" role="group">
                                                         <form action="" method="POST" class="addTaskForm">
                                                             <div class="input-group">
                                                                 <input type="text" class="form-control" id="newTaskName-<?= $list['id'] ?>" name="newTaskName-<?= $list['id'] ?>" placeholder="Ajouter une tâche">
                                                                 <input type="date" class="form-control" id="dueDateNewTask-<?= $list['id'] ?>" name="dueDateNewTask-<?= $list['id'] ?>">
-
                                                                 <div class="input-group-append">
                                                                     <button type="submit" name="addTaskBtn" class="btn btn-primary addTaskBtn" addTaskBtn data-list-id="<?= $list['id'] ?>">+</button>
                                                                 </div>
@@ -114,7 +109,6 @@ if (isset($_POST['addTaskBtn'])) {
                                                             <input type="hidden" name="postId" value="<?= $list['id'] ?>">
                                                         </form>
                                                     </div>
-                                                    <div id="tasksContainer-<?= $list['id'] ?>"></div>
                                                     <br>
                                                 </td>
                                             </tr>
