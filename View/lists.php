@@ -8,19 +8,17 @@ use App\Controllers\TaskController;
 
 
 $userController = new UserController();
+$listController = new ListController();
+$taskController = new TaskController();
 
 if (isset($_GET['logOut'])) {
     $userController->logOut();
     die();
 }
 
-
-
-$listController = new ListController();
-
 if ($_SESSION['user']) {
     $lists = $listController->displayUserLists($_SESSION['user']->getId());
-    var_dump($lists);
+    // var_dump($lists);
 }
 
 
@@ -35,7 +33,9 @@ if (isset($_POST['submitDeleteListForm'])) {
     die();
 }
 
-$taskController = new TaskController();
+// if (isset($_POST['openListBtn'])) {
+//     $taskController->displayListTasks($idList);
+// }
 
 if (isset($_POST['addTaskBtn'])) {
     $taskController->addNewTask(($_POST['newTaskName']), $_POST['dueDateNewTask'], $_POST['postId']);
@@ -94,6 +94,13 @@ if (isset($_POST['addTaskBtn'])) {
                                                         <button type="submit" name="deleteListBtn" class="btn btn-danger deleteListBtn" data-list-id="<?= $list['id'] ?>"><i class="fa-solid fa-trash"></i></button>
                                                         <input type="hidden" name="postId" value="<?= $list['id'] ?>">
                                                     </form>
+                                                    <form action="votre_script_php_pour_recuperer_taches.php" method="post" class="openListForm">
+                                                        <button type="submit" name="openListBtn" class="btn btn-primary openListBtn" data-list-id="<?= $list['id'] ?>">Voir +</button>
+                                                        <div id="tasksContainer-<?= $list['id'] ?>">
+                                                            <!-- Les tâches seront chargées dynamiquement ici -->
+                                                        </div>
+                                                    </form>
+
                                                     <div class="btn-group" role="group">
                                                         <form action="" method="POST" class="addTaskForm">
                                                             <div class="input-group">
@@ -108,12 +115,14 @@ if (isset($_POST['addTaskBtn'])) {
                                                         </form>
                                                     </div>
                                                     <div id="tasksContainer-<?= $list['id'] ?>"></div>
+                                                    <br>
                                                 </td>
                                             </tr>
                                     <?php
                                         endforeach;
                                     }
                                     ?>
+
                                 </tbody>
                             </table>
                         </div>

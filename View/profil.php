@@ -69,7 +69,8 @@ if (isset($_POST['deleteForm'])) {
         </div>
     </div>
     <footer class="bg-dark text-light text-center py-3">
-        <?php include './includes/footer.php'; ?></footer>
+        <?php include './includes/footer.php'; ?>
+    </footer>
 </body>
 
 </html>

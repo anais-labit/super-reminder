@@ -48,7 +48,8 @@ if (isset($_POST['submitForm']) && (!empty($_POST['password']))) {
         </div>
     </div>
     <footer class="bg-dark text-light text-center py-3">
-        <?php include './includes/footer.php'; ?></footer>
+        <?php include './includes/footer.php'; ?>
+    </footer>
 
 </body>
 

@@ -59,7 +59,8 @@ if (isset($_POST['submitForm'])) {
         <p id="generalconnexion" class="text-center"><a href="connexion.php">Sign In</a></p>
     </div>
     <footer class="bg-dark text-light text-center py-3">
-        <?php include './includes/footer.php'; ?></footer>
+        <?php include './includes/footer.php'; ?>
+    </footer>
 </body>
 
 </html>

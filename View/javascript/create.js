@@ -139,12 +139,12 @@ async function displayAndCreateTasks() {
         const newTaskName = newTaskNameInput.value;
         const dueDateNewTask = dueDateNewTaskInput.value;
 
-        if (newTaskName.trim() == "") {
-          alert("Le nom de la tâche ne peut pas être vide.");
-          return;
-        }
-
         const formData = new FormData();
+        formData.append("addTaskBtn", "true"); 
+        formData.append("newTaskName", newTaskName);
+        formData.append("dueDateNewTask", dueDateNewTask);
+        formData.append("postId", listId);
+
         const response = await fetch("lists.php", {
           method: "POST",
           body: formData,
@@ -156,6 +156,7 @@ async function displayAndCreateTasks() {
         container.textContent = jsonResponse.message;
 
         if (jsonResponse.message == "La tâche a bien été ajoutée.") {
+          container.setAttribute("class", "alert alert-success");
           const task = document.createElement("p");
           task.textContent = newTaskName;
           tasksContainer.appendChild(task);
@@ -172,11 +173,11 @@ async function displayAndCreateTasks() {
           taskStatus.type = "checkbox";
           task.appendChild(taskStatus);
         }
-
-        
       });
     });
   }
 }
 
 displayAndCreateTasks();
+
+

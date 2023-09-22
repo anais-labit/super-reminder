@@ -11,8 +11,7 @@ class TaskController
 
     public function addNewTask($name,  $dueDate, $idList)
     {
-
-        if (isset($name) && isset($dueDate)) {
+        if (isset($name) && isset($dueDate)){
             $name = trim(htmlspecialchars($_POST['newTaskName']));
             $idList = intval($_POST['postId']);
             $dueDate = $_POST['dueDateNewTask'];
@@ -27,10 +26,10 @@ class TaskController
                 "success" => true,
                 "message" => "La tâche a bien été ajoutée."
             ]);
-        } else {
+        } else if (empty($name) || (empty($dueDate))){
             echo json_encode([
                 "success" => false,
-                "message" => "Une erreur est survenue."
+                "message" => "Merci de remplir tous les champs."
             ]);
         }
     }
@@ -38,10 +37,24 @@ class TaskController
     public function displayListTasks(int $idList): ?array {
 
         $listTasks = new TaskModel();
-
         $result = $listTasks->getListTasks($idList);
+        // echo json_encode([$result])
 
         return $result;
         
+    }
+
+
+    public function checkIfExists($taskName): bool
+    {
+        $tasks = new TaskModel();
+        $listTasks = $tasks->getListTasks($idList);
+
+        foreach ($listTasks as $task) {
+            if (strtolower($task['name']) == strtolower($taskName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
