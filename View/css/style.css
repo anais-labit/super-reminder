@@ -39,8 +39,13 @@ body {
   text-align: justify;
 }
 
+.doneTask {
+  text-decoration: line-through;
+  background-color: #f2f2f2;
+  color: #888;
+  font-style: italic;
+}
+
 footer {
   flex-shrink: 0;
 }
-
-

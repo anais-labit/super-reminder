@@ -30,7 +30,9 @@ class TaskController
                 $newTask->createTask($taskName, $date, $dueDate, $tag, $idList, $status);
                 echo json_encode([
                     "success" => true,
-                    "message" => "La tâche a bien été ajoutée."
+                    "message" => "La tâche a bien été ajoutée.",
+                    // "status" => 0
+                    
                 ]);
             }
         } else {
@@ -43,10 +45,21 @@ class TaskController
 
     public function displayListTasks(int $idList): ?array
     {
-
         $listTasks = new TaskModel();
         $result = $listTasks->getListTasks($idList);
 
         return $result;
+    }
+
+    public function changeTaskStatus(int $idTask, int $status)
+    {
+        $taskStatus = new TaskModel();
+        if ($status == 0) {
+            $newStatus = 1;
+        } else {
+            $newStatus = 0;
+        }
+        $taskStatus->updateTaskStatus($idTask, $newStatus);
+        echo 'ok';
     }
 }

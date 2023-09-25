@@ -101,6 +101,8 @@ async function addTasksAndDisplayMessage() {
         const dueDateNewTaskInput = document.querySelector(
           `#dueDateNewTask-${listId}`
         );
+
+        const taskId = document.querySelector(`postTaskId-${listId}`);
         const newTaskName = newTaskNameInput.value;
         const dueDateNewTask = dueDateNewTaskInput.value;
 
@@ -109,6 +111,7 @@ async function addTasksAndDisplayMessage() {
         formData.append("newTaskName", newTaskName);
         formData.append("dueDateNewTask", dueDateNewTask);
         formData.append("postId", listId);
+        formData.append("postTaskId", taskId);
 
         const response = await fetch("lists.php", {
           method: "POST",
@@ -120,23 +123,26 @@ async function addTasksAndDisplayMessage() {
         const container = document.querySelector("#message");
         container.textContent = jsonResponse.message;
 
+        console.log(jsonResponse);
+
         if (jsonResponse.message == "La tâche a bien été ajoutée.") {
           container.setAttribute("class", "alert alert-success");
           const task = document.createElement("p");
           task.textContent = newTaskName;
+          // task.setAttribute("id", `taskName-${taskId}`);
           tasksContainer.appendChild(task);
 
           const taskDueDate = document.createElement("span");
-          taskDueDate.textContent = " Due date : " + dueDateNewTask;
+          taskDueDate.textContent = " Due date : " + formatDate(dueDateNewTask);
           task.appendChild(taskDueDate);
 
           const deleteTaskBtn = document.createElement("button");
           deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
           task.appendChild(deleteTaskBtn);
 
-          const taskStatus = document.createElement("input");
-          taskStatus.type = "checkbox";
-          task.appendChild(taskStatus);
+          const taskStatusBtn = document.createElement("button");
+          taskStatusBtn.setAttribute("class", "fa-solid fa-check");
+          task.appendChild(taskStatusBtn);
         } else {
           container.setAttribute("class", "alert alert-danger");
         }
@@ -146,3 +152,8 @@ async function addTasksAndDisplayMessage() {
 }
 
 addTasksAndDisplayMessage();
+
+function formatDate(dateString) {
+  const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+  return new Date(dateString).toLocaleDateString("fr-FR", options);
+}

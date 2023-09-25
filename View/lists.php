@@ -10,6 +10,8 @@ $userController = new UserController();
 $listController = new ListController();
 $taskController = new TaskController();
 
+
+
 if (isset($_GET['logOut'])) {
     $userController->logOut();
     die();
@@ -35,6 +37,11 @@ if (isset($_POST['addTaskBtn'])) {
     die();
 }
 
+if (isset($_POST['checkTaskForm'])) {
+    $taskController->changeTaskStatus($_POST['postId'], $task['id']);
+    die();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +55,7 @@ if (isset($_POST['addTaskBtn'])) {
     <link rel="stylesheet" href="./css/style.css">
     <script src="https://kit.fontawesome.com/427958ed2f.js" crossorigin="anonymous"></script>
     <script defer src="./javascript/create.js"></script>
-    <!-- <script defer src="./javascript/update.js"></script> -->
+    <script defer src="./javascript/update.js"></script>
     <script defer src="./javascript/delete.js"></script>
 </head>
 
@@ -89,11 +96,20 @@ if (isset($_POST['addTaskBtn'])) {
                                                         <?php
                                                         $tasks = $taskController->displayListTasks($list['id']);
                                                         foreach ($tasks as $task) : ?>
-                                                            <p> <?= $task['name'] ?>
-                                                                <span> Due date : <?= $task['due_date'] ?></span>
+                                                            <p id="taskName-<?= $task['id'] ?>"> <?= $task['name'] ?>
+                                                                <span> Due date : <?php
+                                                                                    $dueDate = date_create($task['due_date']);
+                                                                                    echo date_format($dueDate, "d-m-Y");
+                                                                                    ?></span>
                                                                 <button><i class="fa-solid fa-trash"></i>
-                                                                </button><input type="checkbox">
+                                                                </button>
+                                                            <form action="" method="POST" class="checkTaskForm">
+                                                                <button type="submit" name="checkTaskBtn" class="btn btn-primary checkTaskBtn" data-task-id="<?= $task['id'] ?>" value="<?= $task['status'] ?>"><i class="fa-solid fa-check"></i>
+                                                                </button>
+                                                            </form>
                                                             </p>
+                                                            <input type="hidden" name="postTaskId" value="<?= $task['id'] ?>">
+
                                                         <?php endforeach;
                                                         ?>
 
@@ -105,7 +121,7 @@ if (isset($_POST['addTaskBtn'])) {
                                                                 <input type="text" class="form-control" id="newTaskName-<?= $list['id'] ?>" name="newTaskName-<?= $list['id'] ?>" placeholder="Ajouter une tâche">
                                                                 <input type="date" class="form-control" id="dueDateNewTask-<?= $list['id'] ?>" name="dueDateNewTask-<?= $list['id'] ?>">
                                                                 <div class="input-group-append">
-                                                                    <button type="submit" name="addTaskBtn" class="btn btn-primary addTaskBtn" addTaskBtn data-list-id="<?= $list['id'] ?>">+</button>
+                                                                    <button type="submit" name="addTaskBtn" class="btn btn-primary addTaskBtn" data-list-id="<?= $list['id'] ?>"><i class="fa-solid fa-plus"></i></button>
                                                                 </div>
                                                             </div>
                                                             <input type="hidden" name="postId" value="<?= $list['id'] ?>">

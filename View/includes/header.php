@@ -13,19 +13,22 @@ $role = new UserController();
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto flex-column">
-                <li class="nav-item">
-                    <?php if (isset($_SESSION['user'])) : ?>
-                        <?php if ($role->validateAdminRole()) : ?>
+                <?php if (isset($_SESSION['user'])) : ?>
+                    <?php if ($role->validateAdminRole()) : ?>
+                        <li class="nav-item">
                             <a class="nav-link" href="./admin.php">Admin</a>
-
-                        <?php else : ?>
-                            <a class="nav-link" href="./lists.php">Lists</a>
-                            <a class="nav-link" href="./profil.php">Profile</a>
-                        <?php endif; ?>
+                        </li>
                     <?php else : ?>
-                        <a class="nav-link" href="./connexion.php">Sign In</a>
+                        <li>
+                            <a class="nav-link" href="./lists.php">Lists</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="./profil.php">Profile</a>
+                        </li>
                     <?php endif; ?>
-                </li>
+                <?php else : ?>
+                    <a class="nav-link" href="./connexion.php">Sign In</a>
+                <?php endif; ?>
                 <li id="logOut" class="nav-item">
                     <?php if (isset($_SESSION['user'])) : ?>
                         <a class="nav-link" href="index.php?logOut">Log Out</a>

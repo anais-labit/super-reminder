@@ -37,13 +37,13 @@ class TaskModel
         $createList->bindValue(':due_date', $dueDate);
         $createList->bindValue(':tag', $tag);
         $createList->bindValue(':id_list', $idList);
-        $createList->bindValue(':status', 0);
+        $createList->bindValue(':status', $status);
         $createList->execute();
     }
 
     public function getListTasks(int $idList): ?array
     {
-        $getTasks = $this->connectDb()->prepare('SELECT * FROM task WHERE id_list = :id_list ');
+        $getTasks = $this->connectDb()->prepare('SELECT id, name, due_date, status, id_list FROM task WHERE id_list = :id_list ');
         $getTasks->bindValue(':id_list', $idList);
         $getTasks->execute();
 
@@ -52,5 +52,13 @@ class TaskModel
         if (!isset($tasks)) {
             return [];
         } else return $tasks;
+    }
+
+    public function updateTaskStatus(int $idTask, int $newStatus): void
+    {
+        $updateTaskStatus = $this->connectDb()->prepare('UPDATE task SET status = "$newStatus" WHERE id = :id');
+        $updateTaskStatus->bindValue('id', $idTask);
+        $updateTaskStatus->bindValue('status', $newStatus);
+        $updateTaskStatus->execute();
     }
 }

@@ -45,7 +45,6 @@ class ListModel
     {
         $createList = $this->connectDb()->prepare('INSERT INTO list (name, id_user) VALUES (:name, :id_user)');
         $name = ucwords($name);
-        var_dump($name);
         $createList->bindValue(':name', $name);
         $createList->bindValue(':id_user', $idUser);
         $createList->execute();
