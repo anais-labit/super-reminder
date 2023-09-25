@@ -22,17 +22,19 @@ class ListController
         return false;
     }
 
-    public function addNewList(string $name, int $idUser): void
+    public function addNewList(string $listName, int $idUser): void
     {
         $listModel = new ListModel();
+        $listName = strtolower(trim(htmlspecialchars($listName)));
+        $listName = ucwords($listName);
 
-        if (!$this->checkIfExists($name) && !empty($name)) {
-            $listModel->createList($name, $idUser);
+        if (!$this->checkIfExists($listName) && !empty($listName)) {
+            $listModel->createList($listName, $idUser);
             echo json_encode([
                 "success" => true,
                 "message" => "Votre liste a bien été créée."
             ]);
-        } elseif (empty($name)) {
+        } elseif (empty($listName)) {
             echo json_encode([
                 "success" => false,
                 "message" => "La liste doit porter un nom."
@@ -52,7 +54,6 @@ class ListController
         $result = $userLists->getUserLists($idUser);
 
         return $result;
-
     }
 
 

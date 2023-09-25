@@ -9,38 +9,44 @@ class TaskController
 {
     private $tasks;
 
-    public function addNewTask($name,  $dueDate, $idList)
+    public function addNewTask($taskName,  $dueDate, $idList)
     {
-        if (isset($name) && isset($dueDate)){
-            $name = trim(htmlspecialchars($_POST['newTaskName']));
-            $idList = intval($_POST['postId']);
-            $dueDate = $_POST['dueDateNewTask'];
-            $tag = 'urgent';
-            $status = 0;
-            $date = date('Y-m-d');
+        $date = date('Y-m-d');
+        $taskName = strtolower(trim(htmlspecialchars($_POST['newTaskName'])));
+        $taskName = ucwords($taskName);
+        if (($taskName != '') && (!empty($dueDate))) {
+            if ($dueDate < $date) {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "La date butoir ne peut pas être ultérieure à la date actuelle."
+                ]);
+            } else {
+                $idList = intval($_POST['postId']);
+                $dueDate = $_POST['dueDateNewTask'];
+                $tag = 'urgent';
+                $status = 0;
 
-            $newTask = new TaskModel();
-            $newTask->createTask($name, $date, $dueDate, $tag, $idList, $status);
-
-            echo json_encode([
-                "success" => true,
-                "message" => "La tâche a bien été ajoutée."
-            ]);
-        } else if (empty($name) || (empty($dueDate))){
+                $newTask = new TaskModel();
+                $newTask->createTask($taskName, $date, $dueDate, $tag, $idList, $status);
+                echo json_encode([
+                    "success" => true,
+                    "message" => "La tâche a bien été ajoutée."
+                ]);
+            }
+        } else {
             echo json_encode([
                 "success" => false,
-                "message" => "Merci de remplir tous les champs."
+                "message" => "Merci de donner un nom et une date butoir à votre tâche."
             ]);
         }
     }
 
-    public function displayListTasks(int $idList): ?array {
+    public function displayListTasks(int $idList): ?array
+    {
 
         $listTasks = new TaskModel();
         $result = $listTasks->getListTasks($idList);
 
         return $result;
     }
-
-
 }

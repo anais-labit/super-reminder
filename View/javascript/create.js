@@ -83,7 +83,7 @@ async function displayAddListMessage() {
 
 displayAddListMessage();
 
-async function addTasksAndDisplaySuccessMessage() {
+async function addTasksAndDisplayMessage() {
   if (window.location.href.endsWith("lists.php")) {
     const addTaskBtns = document.querySelectorAll(".addTaskBtn");
 
@@ -105,7 +105,7 @@ async function addTasksAndDisplaySuccessMessage() {
         const dueDateNewTask = dueDateNewTaskInput.value;
 
         const formData = new FormData();
-        formData.append("addTaskBtn", "true"); 
+        formData.append("addTaskBtn", "true");
         formData.append("newTaskName", newTaskName);
         formData.append("dueDateNewTask", dueDateNewTask);
         formData.append("postId", listId);
@@ -137,12 +137,12 @@ async function addTasksAndDisplaySuccessMessage() {
           const taskStatus = document.createElement("input");
           taskStatus.type = "checkbox";
           task.appendChild(taskStatus);
+        } else {
+          container.setAttribute("class", "alert alert-danger");
         }
       });
     });
   }
 }
 
-addTasksAndDisplaySuccessMessage();
-
-
+addTasksAndDisplayMessage();

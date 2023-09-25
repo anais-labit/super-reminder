@@ -64,7 +64,7 @@ if (isset($_POST['addTaskBtn'])) {
                 <div class="formContainer">
                     <form action="" id="addListForm" method="post">
                         <div class="input-group">
-                            <input type="text" class="form-control" id="newList" name="newList" placeholder="Ajouter une liste">
+                            <input type="text" class="form-control" id="newList" name="newList" placeholder="Créer une liste">
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-primary" name="addListBtn" id="addListBtn"><i class="fa-solid fa-plus"></i></button>
                             </div>
@@ -94,7 +94,9 @@ if (isset($_POST['addTaskBtn'])) {
                                                                 <button><i class="fa-solid fa-trash"></i>
                                                                 </button><input type="checkbox">
                                                             </p>
-                                                        <?php endforeach; ?>
+                                                        <?php endforeach;
+                                                        ?>
+
                                                     </div>
 
                                                     <div class="btn-group" role="group">
