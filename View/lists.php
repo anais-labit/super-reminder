@@ -38,9 +38,7 @@ if (isset($_POST['addTaskBtn'])) {
 }
 
 if (isset($_POST['checkTaskForm'])) {
-    $taskId = $_POST['postTaskId'];
-    $taskStatus = $_POST['status'];
-    $taskController->changeTaskStatus($taskId, $taskStatus);
+    $taskController->changeTaskStatus($_POST['postTaskId'], $_POST['status']);
     die();
 }
 

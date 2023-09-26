@@ -12,7 +12,7 @@ $role = new UserController();
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto flex-column">
+            <ul class="navbar-nav ml-auto">
                 <?php if (isset($_SESSION['user'])) : ?>
                     <?php if ($role->validateAdminRole()) : ?>
                         <li class="nav-item">

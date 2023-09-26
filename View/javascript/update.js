@@ -63,9 +63,7 @@ async function updateTaskStatus() {
           body: formData,
         });
 
-        const jsonResponse = await response.json();
 
-        console.log(jsonResponse.message);
       });
     });
   }
