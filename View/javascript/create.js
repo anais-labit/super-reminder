@@ -91,18 +91,15 @@ async function addTasksAndDisplayMessage() {
       button.addEventListener("click", async function (event) {
         event.preventDefault();
 
-        const listId = button.getAttribute("data-list-id");
-        const tasksContainer = document.querySelector(
+        let listId = button.getAttribute("data-list-id");
+        let tasksContainer = document.querySelector(
           `#tasksContainer-${listId}`
         );
-        const newTaskNameInput = document.querySelector(
-          `#newTaskName-${listId}`
-        );
+        let newTaskNameInput = document.querySelector(`#newTaskName-${listId}`);
         const dueDateNewTaskInput = document.querySelector(
           `#dueDateNewTask-${listId}`
         );
 
-        const taskId = document.querySelector(`postTaskId-${listId}`);
         const newTaskName = newTaskNameInput.value;
         const dueDateNewTask = dueDateNewTaskInput.value;
 
@@ -111,7 +108,6 @@ async function addTasksAndDisplayMessage() {
         formData.append("newTaskName", newTaskName);
         formData.append("dueDateNewTask", dueDateNewTask);
         formData.append("postId", listId);
-        formData.append("postTaskId", taskId);
 
         const response = await fetch("lists.php", {
           method: "POST",
@@ -123,26 +119,45 @@ async function addTasksAndDisplayMessage() {
         const container = document.querySelector("#message");
         container.textContent = jsonResponse.message;
 
-        console.log(jsonResponse);
+        let taskId = jsonResponse.taskId;
 
         if (jsonResponse.message == "La tâche a bien été ajoutée.") {
           container.setAttribute("class", "alert alert-success");
+
           const task = document.createElement("p");
           task.textContent = newTaskName;
-          // task.setAttribute("id", `taskName-${taskId}`);
+          task.setAttribute("id", `taskName-${taskId}`);
           tasksContainer.appendChild(task);
 
           const taskDueDate = document.createElement("span");
           taskDueDate.textContent = " Due date : " + formatDate(dueDateNewTask);
           task.appendChild(taskDueDate);
 
-          const deleteTaskBtn = document.createElement("button");
-          deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
-          task.appendChild(deleteTaskBtn);
+          // const deleteTaskBtn = document.createElement("button");
+          // deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
+          // task.appendChild(deleteTaskBtn);
+
+          const taskStatusForm = document.createElement("form");
+          taskStatusForm.setAttribute("class", "checkTaskForm");
+          taskStatusForm.setAttribute("action", "");
+          taskStatusForm.setAttribute("method", "POST");
+
+          tasksContainer.appendChild(taskStatusForm);
 
           const taskStatusBtn = document.createElement("button");
-          taskStatusBtn.setAttribute("class", "fa-solid fa-check");
-          task.appendChild(taskStatusBtn);
+          taskStatusBtn.setAttribute("class", "btn btn-primary checkTaskBtn");
+          taskStatusBtn.setAttribute("type", "submit");
+          taskStatusBtn.setAttribute("name", "checkTaskBtn");
+          taskStatusBtn.setAttribute("data-task-id", taskId);
+          let taskStatus = jsonResponse.status;
+          taskStatusBtn.setAttribute("value", taskStatus);
+          taskStatusForm.appendChild(taskStatusBtn);
+
+          let i = document.createElement("i");
+          i.setAttribute("class", "fa-solid fa-check");
+          taskStatusBtn.appendChild(i);
+
+          updateTaskStatus();
         } else {
           container.setAttribute("class", "alert alert-danger");
         }

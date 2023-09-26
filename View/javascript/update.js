@@ -32,10 +32,8 @@ async function updateTaskStatus() {
     checkTaskBtns.forEach((button) => {
       button.addEventListener("click", async function (event) {
         event.preventDefault();
-        const taskId = button.getAttribute("data-task-id");
+        let taskId = button.getAttribute("data-task-id");
         let taskStatus = button.getAttribute("value");
-        console.log(taskId);
-        console.log(taskStatus);
 
         if (taskStatus == 0) {
           const taskTitleDisplayer = document.querySelector(
@@ -44,25 +42,30 @@ async function updateTaskStatus() {
 
           taskTitleDisplayer.classList.add("doneTask");
           button.setAttribute("value", 1);
+          taskStatus = 1;
         } else {
           const taskTitleDisplayer = document.querySelector(
             `#taskName-${taskId}`
           );
           taskTitleDisplayer.classList.remove("doneTask");
           button.setAttribute("value", 0);
+          taskStatus = 0;
         }
 
-        // const formData = new FormData();
-        // formData.append("taskId", taskId);
-        // formData.append("status", taskStatus);
+        const formData = new FormData();
 
-        // const response = await fetch("lists.php", {
-        //   method: "POST",
-        //   body: formData,
-        // });
-        // const jsonResponse = await response.text();
+        formData.append("postTaskId", taskId);
+        formData.append("status", taskStatus);
+        formData.append("checkTaskForm", "checkTaskForm");
 
-        // console.log(jsonResponse);
+        const response = await fetch("lists.php", {
+          method: "POST",
+          body: formData,
+        });
+
+        const jsonResponse = await response.json();
+
+        console.log(jsonResponse.message);
       });
     });
   }

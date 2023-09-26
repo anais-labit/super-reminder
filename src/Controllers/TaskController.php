@@ -9,11 +9,12 @@ class TaskController
 {
     private $tasks;
 
-    public function addNewTask($taskName,  $dueDate, $idList)
+    public function addNewTask($taskName, $dueDate, $idList)
     {
         $date = date('Y-m-d');
         $taskName = strtolower(trim(htmlspecialchars($_POST['newTaskName'])));
         $taskName = ucwords($taskName);
+
         if (($taskName != '') && (!empty($dueDate))) {
             if ($dueDate < $date) {
                 echo json_encode([
@@ -27,12 +28,13 @@ class TaskController
                 $status = 0;
 
                 $newTask = new TaskModel();
-                $newTask->createTask($taskName, $date, $dueDate, $tag, $idList, $status);
+                $newlyCreatedTaskId = $newTask->createTask($taskName, $date, $dueDate, $tag, $idList, $status); 
+
                 echo json_encode([
                     "success" => true,
                     "message" => "La tâche a bien été ajoutée.",
-                    // "status" => 0
-                    
+                    'taskId' => $newlyCreatedTaskId, 
+                    "status" => $status
                 ]);
             }
         } else {
@@ -43,6 +45,7 @@ class TaskController
         }
     }
 
+
     public function displayListTasks(int $idList): ?array
     {
         $listTasks = new TaskModel();
@@ -51,15 +54,10 @@ class TaskController
         return $result;
     }
 
-    public function changeTaskStatus(int $idTask, int $status)
+    public function changeTaskStatus(int $idTask, int $status): void
     {
         $taskStatus = new TaskModel();
-        if ($status == 0) {
-            $newStatus = 1;
-        } else {
-            $newStatus = 0;
-        }
-        $taskStatus->updateTaskStatus($idTask, $newStatus);
-        echo 'ok';
+        $taskStatus->updateTaskStatus($idTask, $status);
+
     }
 }

@@ -29,17 +29,24 @@ class TaskModel
         $conn = new DatabaseModel;
         return $conn->connect();
     }
-
-    public function createTask(string $name, string $date, string $dueDate, string $tag, $idList, int $status): void
+    public function createTask(string $name, string $date, string $dueDate, string $tag, $idList, int $status): int
     {
-        $createList = $this->connectDb()->prepare('INSERT INTO task (name, date, due_date, tag, id_list, status) VALUES (:name, NOW(), :due_date, :tag, :id_list, :status)');
+        $conn = $this->connectDb();
+
+        $createList = $conn->prepare('INSERT INTO task (name, date, due_date, tag, id_list, status) VALUES (:name, NOW(), :due_date, :tag, :id_list, :status)');
         $createList->bindValue(':name', $name);
         $createList->bindValue(':due_date', $dueDate);
         $createList->bindValue(':tag', $tag);
         $createList->bindValue(':id_list', $idList);
         $createList->bindValue(':status', $status);
         $createList->execute();
+
+        $lastInsertId = $conn->lastInsertId();
+
+        return $lastInsertId;
     }
+
+
 
     public function getListTasks(int $idList): ?array
     {
@@ -56,9 +63,9 @@ class TaskModel
 
     public function updateTaskStatus(int $idTask, int $newStatus): void
     {
-        $updateTaskStatus = $this->connectDb()->prepare('UPDATE task SET status = "$newStatus" WHERE id = :id');
+        $updateTaskStatus = $this->connectDb()->prepare('UPDATE task SET status = :status WHERE id = :id');
         $updateTaskStatus->bindValue('id', $idTask);
-        $updateTaskStatus->bindValue('status', $newStatus);
+        $updateTaskStatus->bindValue('status', $newStatus); 
         $updateTaskStatus->execute();
     }
 }
