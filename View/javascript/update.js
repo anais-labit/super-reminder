@@ -62,11 +62,11 @@ async function updateTaskStatus() {
           method: "POST",
           body: formData,
         });
-
-
       });
     });
   }
 }
 
 updateTaskStatus();
+
+

@@ -48,7 +48,7 @@ class TaskModel
 
 
 
-    public function getListTasks(int $idList): ?array
+    public function getListTasks($idList)
     {
         $getTasks = $this->connectDb()->prepare('SELECT id, name, due_date, status, id_list FROM task WHERE id_list = :id_list ');
         $getTasks->bindValue(':id_list', $idList);
@@ -56,9 +56,8 @@ class TaskModel
 
         $tasks = $getTasks->fetchAll(PDO::FETCH_ASSOC);
 
-        if (!isset($tasks)) {
-            return [];
-        } else return $tasks;
+        echo json_encode($tasks);
+
     }
 
     public function updateTaskStatus(int $idTask, int $newStatus): void

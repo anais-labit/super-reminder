@@ -68,9 +68,9 @@ async function displayAddListMessage() {
 
         if (jsonResponse.message == "Votre liste a bien été créée.") {
           container.setAttribute("class", "alert alert-success");
-          setTimeout(function () {
-            window.location.href = "lists.php";
-          }, 1300);
+          const listsContainer = document.querySelector("#listsContainer");
+          listsContainer.textContent = "";
+          getUserLists();
         } else {
           container.setAttribute("class", "alert alert-danger");
         }
@@ -83,92 +83,92 @@ async function displayAddListMessage() {
 
 displayAddListMessage();
 
-async function addTasksAndDisplayMessage() {
-  if (window.location.href.endsWith("lists.php")) {
-    const addTaskBtns = document.querySelectorAll(".addTaskBtn");
+// async function addTasksAndDisplayMessage() {
+//   if (window.location.href.endsWith("lists.php")) {
+//     const addTaskBtns = document.querySelectorAll(".addTaskBtn");
 
-    addTaskBtns.forEach((button) => {
-      button.addEventListener("click", async function (event) {
-        event.preventDefault();
+//     addTaskBtns.forEach((button) => {
+//       button.addEventListener("click", async function (event) {
+//         event.preventDefault();
 
-        let listId = button.getAttribute("data-list-id");
-        let tasksContainer = document.querySelector(
-          `#tasksContainer-${listId}`
-        );
-        let newTaskNameInput = document.querySelector(`#newTaskName-${listId}`);
-        const dueDateNewTaskInput = document.querySelector(
-          `#dueDateNewTask-${listId}`
-        );
+//         let listId = button.getAttribute("data-list-id");
+//         let tasksContainer = document.querySelector(
+//           `#tasksContainer-${listId}`
+//         );
+//         let newTaskNameInput = document.querySelector(`#newTaskName-${listId}`);
+//         const dueDateNewTaskInput = document.querySelector(
+//           `#dueDateNewTask-${listId}`
+//         );
 
-        const newTaskName = newTaskNameInput.value;
-        const dueDateNewTask = dueDateNewTaskInput.value;
+//         const newTaskName = newTaskNameInput.value;
+//         const dueDateNewTask = dueDateNewTaskInput.value;
 
-        const formData = new FormData();
-        formData.append("addTaskBtn", "true");
-        formData.append("newTaskName", newTaskName);
-        formData.append("dueDateNewTask", dueDateNewTask);
-        formData.append("postId", listId);
+//         const formData = new FormData();
+//         formData.append("addTaskBtn", "true");
+//         formData.append("newTaskName", newTaskName);
+//         formData.append("dueDateNewTask", dueDateNewTask);
+//         formData.append("postId", listId);
 
-        const response = await fetch("lists.php", {
-          method: "POST",
-          body: formData,
-        });
+//         const response = await fetch("lists.php", {
+//           method: "POST",
+//           body: formData,
+//         });
 
-        const jsonResponse = await response.json();
+//         const jsonResponse = await response.json();
 
-        const container = document.querySelector("#message");
-        container.textContent = jsonResponse.message;
+//         const container = document.querySelector("#message");
+//         container.textContent = jsonResponse.message;
 
-        let taskId = jsonResponse.taskId;
+//         let taskId = jsonResponse.taskId;
 
-        if (jsonResponse.message == "La tâche a bien été ajoutée.") {
-          container.setAttribute("class", "alert alert-success");
+//         if (jsonResponse.message == "La tâche a bien été ajoutée.") {
+//           container.setAttribute("class", "alert alert-success");
 
-          const task = document.createElement("p");
-          task.textContent = newTaskName;
-          task.setAttribute("id", `taskName-${taskId}`);
-          tasksContainer.appendChild(task);
+//           const task = document.createElement("p");
+//           task.textContent = newTaskName;
+//           task.setAttribute("id", `taskName-${taskId}`);
+//           tasksContainer.appendChild(task);
 
-          const taskDueDate = document.createElement("span");
-          taskDueDate.textContent = " Due date : " + formatDate(dueDateNewTask);
-          task.appendChild(taskDueDate);
+//           const taskDueDate = document.createElement("span");
+//           taskDueDate.textContent = " Due date : " + formatDate(dueDateNewTask);
+//           task.appendChild(taskDueDate);
 
-          // const deleteTaskBtn = document.createElement("button");
-          // deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
-          // task.appendChild(deleteTaskBtn);
+//           // const deleteTaskBtn = document.createElement("button");
+//           // deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
+//           // task.appendChild(deleteTaskBtn);
 
-          const taskStatusForm = document.createElement("form");
-          taskStatusForm.setAttribute("class", "checkTaskForm");
-          taskStatusForm.setAttribute("action", "");
-          taskStatusForm.setAttribute("method", "POST");
+//           const taskStatusForm = document.createElement("form");
+//           taskStatusForm.setAttribute("class", "checkTaskForm");
+//           taskStatusForm.setAttribute("action", "");
+//           taskStatusForm.setAttribute("method", "POST");
 
-          tasksContainer.appendChild(taskStatusForm);
+//           tasksContainer.appendChild(taskStatusForm);
 
-          const taskStatusBtn = document.createElement("button");
-          taskStatusBtn.setAttribute("class", "btn btn-primary checkTaskBtn");
-          taskStatusBtn.setAttribute("type", "submit");
-          taskStatusBtn.setAttribute("name", "checkTaskBtn");
-          taskStatusBtn.setAttribute("data-task-id", taskId);
-          let taskStatus = jsonResponse.status;
-          taskStatusBtn.setAttribute("value", taskStatus);
-          taskStatusForm.appendChild(taskStatusBtn);
+//           const taskStatusBtn = document.createElement("button");
+//           taskStatusBtn.setAttribute("class", "btn btn-primary checkTaskBtn");
+//           taskStatusBtn.setAttribute("type", "submit");
+//           taskStatusBtn.setAttribute("name", "checkTaskBtn");
+//           taskStatusBtn.setAttribute("data-task-id", taskId);
+//           let taskStatus = jsonResponse.status;
+//           taskStatusBtn.setAttribute("value", taskStatus);
+//           taskStatusForm.appendChild(taskStatusBtn);
 
-          let i = document.createElement("i");
-          i.setAttribute("class", "fa-solid fa-check");
-          taskStatusBtn.appendChild(i);
+//           let i = document.createElement("i");
+//           i.setAttribute("class", "fa-solid fa-check");
+//           taskStatusBtn.appendChild(i);
 
-          updateTaskStatus();
-        } else {
-          container.setAttribute("class", "alert alert-danger");
-        }
-      });
-    });
-  }
-}
+//           updateTaskStatus();
+//         } else {
+//           container.setAttribute("class", "alert alert-danger");
+//         }
+//       });
+//     });
+//   }
+// }
 
-addTasksAndDisplayMessage();
+// addTasksAndDisplayMessage();
 
-function formatDate(dateString) {
-  const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-  return new Date(dateString).toLocaleDateString("fr-FR", options);
-}
+// function formatDate(dateString) {
+//   const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+//   return new Date(dateString).toLocaleDateString("fr-FR", options);
+// }

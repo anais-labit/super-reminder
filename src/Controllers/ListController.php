@@ -8,20 +8,6 @@ class ListController
 {
     private $list;
 
-    public function checkIfExists($listName): bool
-    {
-        $lists = new ListModel();
-        $idUser = $_SESSION['user']->getId();
-        $userLists = $lists->getUserLists($idUser);
-
-        foreach ($userLists as $list) {
-            if (strtolower($list['name']) == strtolower($listName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public function addNewList(string $listName, int $idUser): void
     {
         $listModel = new ListModel();
@@ -47,15 +33,26 @@ class ListController
         }
     }
 
+    public function checkIfExists($listName): bool
+    {
+        $lists = new ListModel();
+        $idUser = $_SESSION['user']->getId();
+        $userLists = $lists->getUserLists($idUser);
 
-    function displayUserLists(int $idUser): ?array
+        foreach ($userLists as $list) {
+            if (strtolower($list['name']) == strtolower($listName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function displayUserLists(int $idUser)
     {
         $userLists = new ListModel();
         $result = $userLists->getUserLists($idUser);
-
-        return $result;
+        echo json_encode($result);
     }
-
 
     function deleteList(int $idList, int $idUser): void
     {

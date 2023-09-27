@@ -23,7 +23,7 @@ class ListModel
         return $conn->connect();
     }
 
-    public function getUserLists($idUser): ?array
+    public function getUserLists($idUser)
     {
         $query = 'SELECT list.id, list.name
               FROM list
@@ -36,9 +36,7 @@ class ListModel
 
         $lists = $check->fetchAll(PDO::FETCH_ASSOC);
 
-        if (!isset($lists)) {
-            return [];
-        } else return $lists;
+        return $lists;
     }
 
     public function createList(string $name, int $idUser): void
@@ -57,5 +55,4 @@ class ListModel
         $deleteList->bindValue(':idUser', $idUser);
         $deleteList->execute();
     }
-
 }

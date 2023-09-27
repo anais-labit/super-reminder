@@ -41,3 +41,39 @@ async function displayLoginUserMessage() {
 }
 
 displayLoginUserMessage();
+
+async function getUserLists() {
+  if (window.location.href.endsWith("lists.php")) {
+    const response = await fetch("lists.php?getUserLists");
+    const jsonLists = await response.json();
+
+    const listsContainer = document.querySelector("#listsContainer");
+
+    jsonLists.forEach((list) => {
+      const oneListContainer = document.createElement("li");
+      oneListContainer.textContent = list.name;
+      listsContainer.appendChild(oneListContainer);
+
+      let listId = list.id;
+      getListsTasks(listId, oneListContainer);
+    });
+  }
+}
+
+async function getListsTasks(listId, listContainer) {
+  if (window.location.href.endsWith("lists.php")) {
+    const tasksResponse = await fetch("lists.php?getListTasks&id=" + listId);
+    const jsonTasks = await tasksResponse.json();
+
+    const ul = document.createElement("ul");
+    listContainer.appendChild(ul);
+
+    jsonTasks.forEach((task) => {
+      const oneTaskContainer = document.createElement("li");
+      oneTaskContainer.textContent = task.name;
+      ul.appendChild(oneTaskContainer);
+    });
+  }
+}
+
+getUserLists();
