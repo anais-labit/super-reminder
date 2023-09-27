@@ -42,7 +42,7 @@ async function displayLoginUserMessage() {
 
 displayLoginUserMessage();
 
-async function getUserLists() {
+async function getUsersLists() {
   if (window.location.href.endsWith("lists.php")) {
     const response = await fetch("lists.php?getUserLists");
     const jsonLists = await response.json();
@@ -53,6 +53,14 @@ async function getUserLists() {
       const oneListContainer = document.createElement("li");
       oneListContainer.textContent = list.name;
       listsContainer.appendChild(oneListContainer);
+
+      const deleteListsBtns = document.createElement("button");
+      deleteListsBtns.setAttribute("class", "deleteListBtns");
+      oneListContainer.appendChild(deleteListsBtns);
+
+      const i = document.createElement("i");
+      i.setAttribute("class", "fa-solid fa-trash");
+      deleteListsBtns.appendChild(i);      
 
       let listId = list.id;
       getListsTasks(listId, oneListContainer);
@@ -76,4 +84,4 @@ async function getListsTasks(listId, listContainer) {
   }
 }
 
-getUserLists();
+getUsersLists();

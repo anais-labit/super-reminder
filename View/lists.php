@@ -33,10 +33,10 @@ if (isset($_POST['submitAddListForm'])) {
     die();
 }
 
-// if (isset($_POST['submitDeleteListForm'])) {
-//     $listController->deleteList($_POST['postId'], $_SESSION['user']->getId());
-//     die();
-// }
+if (isset($_POST['submitDeleteListForm'])) {
+    $listController->deleteList($_POST['postId'], $_SESSION['user']->getId());
+    die();
+}
 
 // if (isset($_POST['addTaskBtn'])) {
 //     $taskController->addNewTask(($_POST['newTaskName']), $_POST['dueDateNewTask'], $_POST['postId']);

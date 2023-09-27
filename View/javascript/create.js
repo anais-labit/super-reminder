@@ -83,6 +83,10 @@ async function displayAddListMessage() {
 
 displayAddListMessage();
 
+
+
+
+
 // async function addTasksAndDisplayMessage() {
 //   if (window.location.href.endsWith("lists.php")) {
 //     const addTaskBtns = document.querySelectorAll(".addTaskBtn");
@@ -133,9 +137,9 @@ displayAddListMessage();
 //           taskDueDate.textContent = " Due date : " + formatDate(dueDateNewTask);
 //           task.appendChild(taskDueDate);
 
-//           // const deleteTaskBtn = document.createElement("button");
-//           // deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
-//           // task.appendChild(deleteTaskBtn);
+          // const deleteTaskBtn = document.createElement("button");
+          // deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
+          // task.appendChild(deleteTaskBtn);
 
 //           const taskStatusForm = document.createElement("form");
 //           taskStatusForm.setAttribute("class", "checkTaskForm");

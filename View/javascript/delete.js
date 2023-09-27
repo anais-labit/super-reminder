@@ -40,34 +40,36 @@ displayDeleteUserMessage();
 async function displayDeleteListMessage() {
   try {
     if (window.location.href.endsWith("lists.php")) {
-      const deleteListButtons = document.querySelectorAll(".deleteListBtn");
+      const deleteListButtons = document.querySelectorAll(".deleteListBtns");
 
       deleteListButtons.forEach((deleteListBtn) => {
-        deleteListBtn.addEventListener("click", async function (event) {
-          event.preventDefault();
+        deleteListBtn.addEventListener("click", function (event) {
+          console.log("coucou");
 
-          const listId = deleteListBtn.getAttribute("data-list-id");
+          // event.preventDefault();
 
-          const formData = new FormData();
-          formData.append("submitDeleteListForm", "");
-          formData.append("postId", listId);
+          // const listId = deleteListBtn.getAttribute("data-list-id");
 
-          const response = await fetch("lists.php", {
-            method: "POST",
-            body: formData,
-          });
+          // const formData = new FormData();
+          // formData.append("submitDeleteListForm", "");
+          // formData.append("postId", listId);
 
-          const jsonResponse = await response.json();
+          // const response = await fetch("lists.php", {
+          //   method: "POST",
+          //   body: formData,
+          // });
 
-          const container = document.querySelector("#message");
-          container.textContent = jsonResponse.message;
+          // const jsonResponse = await response.json();
 
-          if (jsonResponse.message == "La liste a bien été supprimée.") {
-            container.setAttribute("class", "alert alert-success");
-            setTimeout(function () {
-              window.location.href = "lists.php";
-            }, 1300);
-          }
+          // const container = document.querySelector("#message");
+          // container.textContent = jsonResponse.message;
+
+          // if (jsonResponse.message == "La liste a bien été supprimée.") {
+          //   container.setAttribute("class", "alert alert-success");
+          //   setTimeout(function () {
+          //     window.location.href = "lists.php";
+          //   }, 1300);
+          // }
         });
       });
     }
@@ -77,4 +79,3 @@ async function displayDeleteListMessage() {
 }
 
 displayDeleteListMessage();
-
