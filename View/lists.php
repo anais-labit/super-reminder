@@ -33,8 +33,9 @@ if (isset($_POST['submitAddListForm'])) {
     die();
 }
 
-if (isset($_POST['submitDeleteListForm'])) {
-    $listController->deleteList($_POST['postId'], $_SESSION['user']->getId());
+
+if (isset($_GET['deleteList'])) {
+    $listController->deleteList($_GET['deleteList'], $_SESSION['user']->getId());
     die();
 }
 
@@ -74,20 +75,19 @@ if (isset($_POST['submitDeleteListForm'])) {
         <div class="container mt-5">
             <h2 class="text-center">Mes listes</h2>
             <p id="message"></p>
-            <div class="formContainer">
-                <form action="" id="addListForm" method="post">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="newList" name="newList" placeholder="Créer une liste">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary" name="addListBtn" id="addListBtn"><i class="fa-solid fa-plus"></i></button>
-                        </div>
+            <form action="" id="addListForm" method="post">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="newList" name="newList" placeholder="Créer une liste">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary" name="addListBtn" id="addListBtn"><i class="fa-solid fa-plus"></i></button>
                     </div>
-                </form>
-            </div>
-            <div id="listsContainer">
-            </div>
-            <div id="tasksContainer"></div>
+                </div>
+            </form>
         </div>
+        <div class="container" id="listsContainer">
+        </div>
+        <div class="container" id="tasksContainer"></div>
+    </div>
     </div>
     </div>
     </div>

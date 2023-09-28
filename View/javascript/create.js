@@ -42,6 +42,65 @@ async function displayRegisterUserMessage() {
 
 displayRegisterUserMessage();
 
+async function getUserLists() {
+  if (window.location.href.endsWith("lists.php")) {
+    const response = await fetch("lists.php?getUserLists");
+    const jsonLists = await response.json();
+
+    const listsContainer = document.querySelector("#listsContainer");
+
+    jsonLists.forEach((list) => {
+      // Crée une liste avec une classe Bootstrap
+      const oneListContainer = document.createElement("li");
+      oneListContainer.textContent = list.name;
+      oneListContainer.classList.add("list-group-item"); // Classe Bootstrap
+
+      const deleteListsBtns = document.createElement("button");
+      deleteListsBtns.classList.add("btn", "btn-danger", "deleteListBtns"); // Classes Bootstrap
+      let listId = list.id;
+      deleteListsBtns.setAttribute("id", listId);
+      const i = document.createElement("i");
+      i.setAttribute("class", "fa-solid fa-trash");
+      deleteListsBtns.appendChild(i);
+
+      oneListContainer.appendChild(deleteListsBtns);
+      listsContainer.appendChild(oneListContainer);
+
+      getListTasks(listId, oneListContainer);
+    });
+  }
+}
+
+
+refreshUserLists();
+
+async function refreshUserLists() {
+  await getUserLists();
+  let success = await displayDeleteListMessage();
+
+  if (success) {
+    const listsContainer = document.querySelector("#listsContainer");
+    listsContainer.innerHTML = "";
+    await refreshUserLists();
+  }
+}
+
+async function getListTasks(listId, listContainer) {
+  if (window.location.href.endsWith("lists.php")) {
+    const tasksResponse = await fetch("lists.php?getListTasks&id=" + listId);
+    const jsonTasks = await tasksResponse.json();
+
+    const ul = document.createElement("ul");
+    listContainer.appendChild(ul);
+
+    jsonTasks.forEach((task) => {
+      const oneTaskContainer = document.createElement("li");
+      oneTaskContainer.textContent = task.name;
+      ul.appendChild(oneTaskContainer);
+    });
+  }
+}
+
 async function displayAddListMessage() {
   try {
     if (window.location.href.endsWith("lists.php")) {
@@ -54,7 +113,7 @@ async function displayAddListMessage() {
       addListBtn.addEventListener("click", async function (event) {
         event.preventDefault();
         const data = new FormData(form);
-        data.append("submitAddListForm", "");
+        data.append("submitAddListForm", "submitAddListForm");
 
         const response = await fetch("lists.php", {
           method: "POST",
@@ -82,10 +141,6 @@ async function displayAddListMessage() {
 }
 
 displayAddListMessage();
-
-
-
-
 
 // async function addTasksAndDisplayMessage() {
 //   if (window.location.href.endsWith("lists.php")) {
@@ -137,9 +192,9 @@ displayAddListMessage();
 //           taskDueDate.textContent = " Due date : " + formatDate(dueDateNewTask);
 //           task.appendChild(taskDueDate);
 
-          // const deleteTaskBtn = document.createElement("button");
-          // deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
-          // task.appendChild(deleteTaskBtn);
+// const deleteTaskBtn = document.createElement("button");
+// deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
+// task.appendChild(deleteTaskBtn);
 
 //           const taskStatusForm = document.createElement("form");
 //           taskStatusForm.setAttribute("class", "checkTaskForm");
@@ -176,3 +231,5 @@ displayAddListMessage();
 //   const options = { day: "2-digit", month: "2-digit", year: "numeric" };
 //   return new Date(dateString).toLocaleDateString("fr-FR", options);
 // }
+
+

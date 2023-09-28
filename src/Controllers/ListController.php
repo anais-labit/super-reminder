@@ -54,10 +54,12 @@ class ListController
         echo json_encode($result);
     }
 
-    function deleteList(int $idList, int $idUser): void
+
+    function deleteList(string $idList, int $idUser): void
     {
         $delete = new ListModel();
         $delete->deleteLists($idList, $idUser);
+        
         echo json_encode(['message' => 'La liste a bien été supprimée.']);
     }
 }
