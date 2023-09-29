@@ -72,10 +72,10 @@ if (isset($_POST['addTaskBtn'])) {
         <?php include './includes/header.php' ?>
     </header>
     <div class="page">
-        <div class="container mt-5 custom-container">
+        <div class="container mt-5 custom-container ">
             <form action="" id="addListForm" method="post">
                 <div class="input-group">
-                    <input type="text" class="form-control border-0" id=" newList" name="newList" placeholder="Créer une liste">
+                    <input type="text" class="form-control border-0" id="newList" name="newList" placeholder="Créer une liste">
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-primary" name="addListBtn" id="addListBtn"><i class="fa-solid fa-plus"></i></button>
                     </div>
