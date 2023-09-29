@@ -57,11 +57,7 @@ async function displayDeleteListMessage() {
                 const container = document.querySelector("#message");
                 container.setAttribute("class", "alert alert-success");
                 container.textContent = jsonResponse.message;
-
-                // const listsContainer =
-                //   document.querySelector("#listsContainer");
-                // listsContainer.innerHTML = "";
-
+                
                 const listToRemove = document.querySelector(`#list-${listId}`);
                 if (listToRemove) {
                   listToRemove.remove();

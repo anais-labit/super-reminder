@@ -39,10 +39,10 @@ if (isset($_GET['deleteList'])) {
     die();
 }
 
-// if (isset($_POST['addTaskBtn'])) {
-//     $taskController->addNewTask(($_POST['newTaskName']), $_POST['dueDateNewTask'], $_POST['postId']);
-//     die();
-// }
+if (isset($_POST['addTaskBtn'])) {
+    $taskController->addNewTask(($_POST['newTaskName']), $_POST['dueDateNewTask'], $_POST['postId']);
+    die();
+}
 
 // if (isset($_POST['checkTaskForm'])) {
 //     $taskController->changeTaskStatus($_POST['postTaskId'], $_POST['status']);
@@ -86,6 +86,7 @@ if (isset($_GET['deleteList'])) {
             <p id="message"></p>
             <div id="listsContainer">
             </div>
+            
             <div id="tasksContainer"></div>
         </div>
     </div>

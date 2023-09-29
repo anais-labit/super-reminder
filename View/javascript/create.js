@@ -80,9 +80,49 @@ async function getUserLists() {
       oneListContainer.appendChild(deleteListButton);
       listsContainer.appendChild(oneListContainer);
 
-      displayDeleteListMessage();
+      const tasksContainer = document.createElement("ul");
+      tasksContainer.setAttribute("id", `tasksContainer-${listId}`);
+      oneListContainer.appendChild(tasksContainer);
 
-      getListTasks(listId, oneListContainer);
+      const form = document.createElement("form");
+      form.setAttribute("action", "");
+      form.setAttribute("method", "POST");
+      form.setAttribute("class", "addTaskForm");
+      form.setAttribute("data-list-id", listId); // Ajoutez un attribut data-list-id pour identifier ce formulaire
+      oneListContainer.appendChild(form);
+
+      const taskInput = document.createElement("input");
+      taskInput.setAttribute("type", "text");
+      taskInput.setAttribute("class", "form-control");
+      taskInput.setAttribute("id", `newTaskName-${listId}`);
+      taskInput.setAttribute("name", `newTaskName-${listId}`);
+      taskInput.setAttribute("placeholder", "Ajouter une tâche");
+      form.appendChild(taskInput);
+
+      const taskDueDateInput = document.createElement("input");
+      taskDueDateInput.setAttribute("type", "date");
+      taskDueDateInput.setAttribute("class", "form-control");
+      taskDueDateInput.setAttribute("id", `dueDateNewTask-${listId}`);
+      taskDueDateInput.setAttribute("name", `dueDateNewTask-${listId}`);
+      form.appendChild(taskDueDateInput);
+
+      const addTaskBtn = document.createElement("button");
+      addTaskBtn.setAttribute("type", "button");
+      addTaskBtn.setAttribute("name", "addTaskBtn");
+      addTaskBtn.setAttribute("class", "btn btn-primary addTaskBtn");
+      addTaskBtn.setAttribute("data-list-id", listId);
+      form.appendChild(addTaskBtn);
+
+      const plusIcon = document.createElement("i");
+      plusIcon.setAttribute("class", "fa-solid fa-plus");
+      addTaskBtn.appendChild(plusIcon);
+
+      displayDeleteListMessage();
+      addTasksAndDisplayMessage();
+
+      console.log(listId);
+      console.log(oneListContainer);
+      getListTasks(listId);
     });
   }
 }
@@ -97,22 +137,6 @@ async function refreshUserLists() {
     const listsContainer = document.querySelector("#listsContainer");
     listsContainer.innerHTML = "";
     await refreshUserLists();
-  }
-}
-
-async function getListTasks(listId, listContainer) {
-  if (window.location.href.endsWith("lists.php")) {
-    const tasksResponse = await fetch("lists.php?getListTasks&id=" + listId);
-    const jsonTasks = await tasksResponse.json();
-
-    const ul = document.createElement("ul");
-    listContainer.appendChild(ul);
-
-    jsonTasks.forEach((task) => {
-      const oneTaskContainer = document.createElement("li");
-      oneTaskContainer.textContent = task.name;
-      ul.appendChild(oneTaskContainer);
-    });
   }
 }
 
@@ -166,92 +190,78 @@ async function displayAddListMessage() {
 
 displayAddListMessage();
 
-// async function addTasksAndDisplayMessage() {
-//   if (window.location.href.endsWith("lists.php")) {
-//     const addTaskBtns = document.querySelectorAll(".addTaskBtn");
+async function getListTasks(listId) {
+  if (window.location.href.endsWith("lists.php")) {
+    const tasksResponse = await fetch("lists.php?getListTasks&id=" + listId);
+    const jsonTasks = await tasksResponse.json();
 
-//     addTaskBtns.forEach((button) => {
-//       button.addEventListener("click", async function (event) {
-//         event.preventDefault();
+    console.log(jsonTasks);
 
-//         let listId = button.getAttribute("data-list-id");
-//         let tasksContainer = document.querySelector(
-//           `#tasksContainer-${listId}`
-//         );
-//         let newTaskNameInput = document.querySelector(`#newTaskName-${listId}`);
-//         const dueDateNewTaskInput = document.querySelector(
-//           `#dueDateNewTask-${listId}`
-//         );
+    jsonTasks.forEach((task) => {
+      const tasksContainer = document.querySelector(
+        `#tasksContainer-${listId}`
+      );
 
-//         const newTaskName = newTaskNameInput.value;
-//         const dueDateNewTask = dueDateNewTaskInput.value;
+      const oneTaskContainer = document.createElement("li");
+      oneTaskContainer.textContent = task.name;
+      tasksContainer.appendChild(oneTaskContainer);
+    });
+  }
+}
 
-//         const formData = new FormData();
-//         formData.append("addTaskBtn", "true");
-//         formData.append("newTaskName", newTaskName);
-//         formData.append("dueDateNewTask", dueDateNewTask);
-//         formData.append("postId", listId);
+async function addTasksAndDisplayMessage() {
+  if (window.location.href.endsWith("lists.php")) {
+    const addTaskBtns = document.querySelectorAll(".addTaskBtn");
 
-//         const response = await fetch("lists.php", {
-//           method: "POST",
-//           body: formData,
-//         });
+    addTaskBtns.forEach((button) => {
+      button.addEventListener("click", async function (event) {
+        event.preventDefault();
 
-//         const jsonResponse = await response.json();
+        const listId = form.getAttribute("data-list-id");
+        let tasksContainer = document.querySelector(
+          `#tasksContainer-${listId}`
+        );
+        let newTaskNameInput = document.querySelector(`#newTaskName-${listId}`);
+        const dueDateNewTaskInput = document.querySelector(
+          `#dueDateNewTask-${listId}`
+        );
 
-//         const container = document.querySelector("#message");
-//         container.textContent = jsonResponse.message;
+        const newTaskName = newTaskNameInput.value;
+        const dueDateNewTask = dueDateNewTaskInput.value;
 
-//         let taskId = jsonResponse.taskId;
+        const formData = new FormData();
+        formData.append("addTaskBtn", "true");
+        formData.append("newTaskName", newTaskName);
+        formData.append("dueDateNewTask", dueDateNewTask);
+        formData.append("postId", listId);
 
-//         if (jsonResponse.message == "La tâche a bien été ajoutée.") {
-//           container.setAttribute("class", "alert alert-success");
+        
 
-//           const task = document.createElement("p");
-//           task.textContent = newTaskName;
-//           task.setAttribute("id", `taskName-${taskId}`);
-//           tasksContainer.appendChild(task);
+        const response = await fetch("lists.php", {
+          method: "POST",
+          body: formData,
+        });
 
-//           const taskDueDate = document.createElement("span");
-//           taskDueDate.textContent = " Due date : " + formatDate(dueDateNewTask);
-//           task.appendChild(taskDueDate);
+        const jsonResponse = await response.json();
 
-// const deleteTaskBtn = document.createElement("button");
-// deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
-// task.appendChild(deleteTaskBtn);
+        console.log(jsonResponse);
 
-//           const taskStatusForm = document.createElement("form");
-//           taskStatusForm.setAttribute("class", "checkTaskForm");
-//           taskStatusForm.setAttribute("action", "");
-//           taskStatusForm.setAttribute("method", "POST");
+        const container = document.querySelector("#message");
+        container.textContent = jsonResponse.message;
 
-//           tasksContainer.appendChild(taskStatusForm);
+        let taskId = jsonResponse.taskId;
 
-//           const taskStatusBtn = document.createElement("button");
-//           taskStatusBtn.setAttribute("class", "btn btn-primary checkTaskBtn");
-//           taskStatusBtn.setAttribute("type", "submit");
-//           taskStatusBtn.setAttribute("name", "checkTaskBtn");
-//           taskStatusBtn.setAttribute("data-task-id", taskId);
-//           let taskStatus = jsonResponse.status;
-//           taskStatusBtn.setAttribute("value", taskStatus);
-//           taskStatusForm.appendChild(taskStatusBtn);
+        if (jsonResponse.message == "La tâche a bien été ajoutée.") {
+          container.setAttribute("class", "alert alert-success");
 
-//           let i = document.createElement("i");
-//           i.setAttribute("class", "fa-solid fa-check");
-//           taskStatusBtn.appendChild(i);
+          refreshMessages();
 
-//           updateTaskStatus();
-//         } else {
-//           container.setAttribute("class", "alert alert-danger");
-//         }
-//       });
-//     });
-//   }
-// }
-
-// addTasksAndDisplayMessage();
-
-// function formatDate(dateString) {
-//   const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-//   return new Date(dateString).toLocaleDateString("fr-FR", options);
-// }
+          updateTaskStatus();
+        } else {
+          container.setAttribute("class", "alert alert-danger");
+          refreshMessages();
+        }
+      });
+    });
+  }
+}
