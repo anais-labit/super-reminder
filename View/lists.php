@@ -73,8 +73,6 @@ if (isset($_GET['deleteList'])) {
     </header>
     <div class="page">
         <div class="container mt-5">
-            <h2 class="text-center">Mes listes</h2>
-            <p id="message"></p>
             <form action="" id="addListForm" method="post">
                 <div class="input-group">
                     <input type="text" class="form-control" id="newList" name="newList" placeholder="Créer une liste">
@@ -84,9 +82,12 @@ if (isset($_GET['deleteList'])) {
                 </div>
             </form>
         </div>
-        <div class="container" id="listsContainer">
+        <div class="container mt-3">
+            <p id="message"></p>
+            <div id="listsContainer">
+            </div>
+            <div id="tasksContainer"></div>
         </div>
-        <div class="container" id="tasksContainer"></div>
     </div>
     </div>
     </div>

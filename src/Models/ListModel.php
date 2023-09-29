@@ -28,7 +28,8 @@ class ListModel
         $query = 'SELECT list.id, list.name
               FROM list
               INNER JOIN user ON list.id_user = user.id
-              WHERE user.id = :id_user';
+              WHERE user.id = :id_user
+              ORDER BY list.id DESC';
 
         $check = $this->connectDb()->prepare($query);
         $check->bindValue(':id_user', $idUser, PDO::PARAM_INT);

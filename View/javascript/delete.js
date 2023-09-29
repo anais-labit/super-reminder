@@ -58,10 +58,22 @@ async function displayDeleteListMessage() {
                 container.setAttribute("class", "alert alert-success");
                 container.textContent = jsonResponse.message;
 
+                // const listsContainer =
+                //   document.querySelector("#listsContainer");
+                // listsContainer.innerHTML = "";
+
+                const listToRemove = document.querySelector(`#list-${listId}`);
+                if (listToRemove) {
+                  listToRemove.remove();
+                }
+                refreshMessages();
+
                 resolve(true); // Résoudre la promesse avec true si tout s'est bien passé
               } else {
                 reject("Échec de la suppression de la liste");
                 container.setAttribute("class", "alert alert-danger");
+
+                refreshMessages();
               }
             } catch (error) {
               reject(error);

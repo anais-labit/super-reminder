@@ -50,35 +50,50 @@ async function getUserLists() {
     const listsContainer = document.querySelector("#listsContainer");
 
     jsonLists.forEach((list) => {
-      // Crée une liste avec une classe Bootstrap
-      const oneListContainer = document.createElement("li");
-      oneListContainer.textContent = list.name;
-      oneListContainer.classList.add("list-group-item"); // Classe Bootstrap
-
-      const deleteListsBtns = document.createElement("button");
-      deleteListsBtns.classList.add("btn", "btn-danger", "deleteListBtns"); // Classes Bootstrap
       let listId = list.id;
-      deleteListsBtns.setAttribute("id", listId);
+      const oneListContainer = document.createElement("li");
+      oneListContainer.setAttribute("id", `list-${listId}`);
+      oneListContainer.classList.add(
+        "list-group-item",
+        "d-flex",
+        "justify-content-between",
+        "align-items-center"
+      );
+
+      const listTitle = document.createElement("span");
+      listTitle.textContent = list.name;
+
+      const deleteListButton = document.createElement("button");
+      deleteListButton.classList.add(
+        "btn",
+        "btn-danger",
+        "deleteListBtns",
+        "ml-auto"
+      );
+
+      deleteListButton.setAttribute("id", listId);
       const i = document.createElement("i");
       i.setAttribute("class", "fa-solid fa-trash");
-      deleteListsBtns.appendChild(i);
+      deleteListButton.appendChild(i);
 
-      oneListContainer.appendChild(deleteListsBtns);
+      oneListContainer.appendChild(listTitle);
+      oneListContainer.appendChild(deleteListButton);
       listsContainer.appendChild(oneListContainer);
+
+      displayDeleteListMessage();
 
       getListTasks(listId, oneListContainer);
     });
   }
 }
 
-
 refreshUserLists();
 
 async function refreshUserLists() {
   await getUserLists();
-  let success = await displayDeleteListMessage();
+  let onDelete = await displayDeleteListMessage();
 
-  if (success) {
+  if (onDelete) {
     const listsContainer = document.querySelector("#listsContainer");
     listsContainer.innerHTML = "";
     await refreshUserLists();
@@ -102,41 +117,50 @@ async function getListTasks(listId, listContainer) {
 }
 
 async function displayAddListMessage() {
-  try {
-    if (window.location.href.endsWith("lists.php")) {
-      const response = await fetch("lists.php");
-      const content = await response.text();
-
+  if (window.location.href.endsWith("lists.php")) {
+    try {
       const addListBtn = document.querySelector("#addListBtn");
       const form = document.querySelector("#addListForm");
+      const container = document.querySelector("#message");
 
       addListBtn.addEventListener("click", async function (event) {
         event.preventDefault();
         const data = new FormData(form);
         data.append("submitAddListForm", "submitAddListForm");
 
-        const response = await fetch("lists.php", {
-          method: "POST",
-          body: data,
-        });
+        try {
+          const response = await fetch("lists.php", {
+            method: "POST",
+            body: data,
+          });
 
-        const jsonResponse = await response.json();
+          if (response.ok) {
+            const jsonResponse = await response.json();
+            container.textContent = jsonResponse.message;
 
-        const container = document.querySelector("#message");
-        container.textContent = jsonResponse.message;
-
-        if (jsonResponse.message == "Votre liste a bien été créée.") {
-          container.setAttribute("class", "alert alert-success");
-          const listsContainer = document.querySelector("#listsContainer");
-          listsContainer.textContent = "";
-          getUserLists();
-        } else {
-          container.setAttribute("class", "alert alert-danger");
+            if (jsonResponse.message === "Votre liste a bien été créée.") {
+              container.setAttribute("class", "alert alert-success");
+              refreshMessages();
+              const listsContainer = document.querySelector("#listsContainer");
+              listsContainer.textContent = "";
+              getUserLists();
+            } else {
+              container.setAttribute("class", "alert alert-danger");
+              refreshMessages();
+            }
+          } else {
+            throw new Error("Réponse HTTP non OK");
+          }
+        } catch (error) {
+          console.error("Une erreur s'est produite :", error);
         }
       });
+    } catch (error) {
+      console.error(
+        "Une erreur s'est produite lors de la recherche des éléments DOM :",
+        error
+      );
     }
-  } catch (error) {
-    console.error("Une erreur s'est produite :", error);
   }
 }
 
@@ -231,5 +255,3 @@ displayAddListMessage();
 //   const options = { day: "2-digit", month: "2-digit", year: "numeric" };
 //   return new Date(dateString).toLocaleDateString("fr-FR", options);
 // }
-
-

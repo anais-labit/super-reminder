@@ -42,3 +42,10 @@ async function displayLoginUserMessage() {
 
 displayLoginUserMessage();
 
+async function refreshMessages() {
+  setTimeout(function () {
+    const container = document.querySelector("#message");
+    container.textContent = "";
+    container.removeAttribute("class");
+  }, 1300);
+}
