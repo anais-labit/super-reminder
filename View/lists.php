@@ -17,7 +17,7 @@ if (isset($_GET['logOut'])) {
     die();
 }
 
-if ($_SESSION['user']) {
+if (isset($_SESSION['user'])) {
     $lists = $listController->displayUserLists($_SESSION['user']->getId());
 }
 
