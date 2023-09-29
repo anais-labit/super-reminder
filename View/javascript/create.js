@@ -49,17 +49,17 @@ async function getUserLists() {
     const listsContainer = document.querySelector("#listsContainer");
 
     const row = document.createElement("div");
-    row.classList.add("row"); // Créez une ligne Bootstrap pour les cartes
+    row.classList.add("row");
 
     jsonLists.forEach((list) => {
       let listId = list.id;
 
       const col = document.createElement("div");
-      col.classList.add("col-md-4", "mb-4"); // Utilisez la classe col-md-4 pour obtenir 3 cartes par ligne
+      col.classList.add("col-md-4", "mb-4");
 
       const oneListContainer = document.createElement("div");
       oneListContainer.setAttribute("id", `list-${listId}`);
-      oneListContainer.classList.add("card"); // Ajoutez la classe card pour créer une carte Bootstrap
+      oneListContainer.classList.add("card");
 
       const cardBody = document.createElement("div");
       cardBody.classList.add("card-body");
@@ -120,7 +120,7 @@ async function getUserLists() {
       const addTaskBtn = document.createElement("button");
       addTaskBtn.setAttribute("type", "button");
       addTaskBtn.setAttribute("name", "addTaskBtn");
-      addTaskBtn.setAttribute("class", "btn btn-primary btn-sm addTaskBtn");
+      addTaskBtn.setAttribute("class", "addTaskBtn");
       addTaskBtn.setAttribute("data-list-id", listId);
       inputGroup.appendChild(addTaskBtn);
 
@@ -133,14 +133,14 @@ async function getUserLists() {
       oneListContainer.appendChild(tasksContainer);
 
       displayDeleteListMessage();
-      addTasksAndDisplayMessage();
 
       col.appendChild(oneListContainer);
-      row.appendChild(col); // Ajoutez la carte à la ligne
+      row.appendChild(col);
       getListTasks(listId);
     });
 
-    listsContainer.appendChild(row); // Ajoutez la ligne au conteneur parent
+    listsContainer.appendChild(row);
+    addTasksAndDisplayMessage();
   }
 }
 
@@ -234,12 +234,13 @@ async function addTasksAndDisplayMessage() {
       button.addEventListener("click", async function (event) {
         event.preventDefault();
 
+        const clickedButton = event.target;
+        const form = clickedButton.closest("form");
+
         const listId = form.getAttribute("data-list-id");
-        let tasksContainer = document.querySelector(
-          `#tasksContainer-${listId}`
-        );
+
         let newTaskNameInput = document.querySelector(`#newTaskName-${listId}`);
-        const dueDateNewTaskInput = document.querySelector(
+        let dueDateNewTaskInput = document.querySelector(
           `#dueDateNewTask-${listId}`
         );
 
@@ -268,6 +269,13 @@ async function addTasksAndDisplayMessage() {
 
         if (jsonResponse.message == "La tâche a bien été ajoutée.") {
           container.setAttribute("class", "alert alert-success");
+
+          const tasksContainer = document.querySelector(
+            `#tasksContainer-${listId}`
+          );
+          const oneTaskContainer = document.createElement("li");
+          oneTaskContainer.textContent = newTaskName;
+          tasksContainer.appendChild(oneTaskContainer);
 
           refreshMessages();
 
