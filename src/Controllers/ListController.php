@@ -32,7 +32,7 @@ class ListController
             $listModel->createList($listName, $idUser);
             echo json_encode([
                 "success" => true,
-                "message" => "Votre liste a bien été créée."
+                "message" => "Liste créée !"
             ]);
         } elseif (empty($listName)) {
             echo json_encode([
@@ -60,6 +60,6 @@ class ListController
         $delete = new ListModel();
         $delete->deleteLists($idList, $idUser);
         
-        echo json_encode(['message' => 'La liste a bien été supprimée.']);
+        echo json_encode(['message' => 'Liste et tâches supprimées !']);
     }
 }

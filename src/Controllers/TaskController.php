@@ -32,7 +32,7 @@ class TaskController
 
                 echo json_encode([
                     "success" => true,
-                    "message" => "La tâche a bien été ajoutée.",
+                    "message" => "Tâche ajoutée !",
                     'taskId' => $newlyCreatedTaskId, 
                     "status" => $status
                 ]);

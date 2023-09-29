@@ -51,6 +51,17 @@ class ListModel
 
     public function deleteLists(string $idList, int $idUser): void
     {
+        $tasksQuery = $this->connectDb()->prepare("SELECT id FROM task WHERE id_list = :idList");
+        $tasksQuery->bindValue(':idList', $idList);
+        $tasksQuery->execute();
+
+        while ($task = $tasksQuery->fetch(PDO::FETCH_ASSOC)) {
+            $taskId = $task['id'];
+            $deleteTask = $this->connectDb()->prepare("DELETE FROM task WHERE id = :id");
+            $deleteTask->bindValue(':id', $taskId);
+            $deleteTask->execute();
+        }
+
         $deleteList = $this->connectDb()->prepare("DELETE FROM list WHERE id = :id AND id_user = :idUser");
         $deleteList->bindValue(':id', $idList);
         $deleteList->bindValue(':idUser', $idUser);

@@ -1,4 +1,4 @@
-async function displayRegisterUserMessage() {
+async function displayRegistrationMessage() {
   try {
     if (window.location.href.endsWith("inscription.php")) {
       const response = await fetch("inscription.php");
@@ -40,8 +40,9 @@ async function displayRegisterUserMessage() {
   }
 }
 
-displayRegisterUserMessage();
-async function getUserLists() {
+displayRegistrationMessage();
+
+async function fetchUserLists() {
   if (window.location.href.endsWith("lists.php")) {
     const response = await fetch("lists.php?getUserLists");
     const jsonLists = await response.json();
@@ -120,7 +121,7 @@ async function getUserLists() {
       const addTaskBtn = document.createElement("button");
       addTaskBtn.setAttribute("type", "button");
       addTaskBtn.setAttribute("name", "addTaskBtn");
-      addTaskBtn.setAttribute("class", "addTaskBtn");
+      addTaskBtn.setAttribute("class", "btn-primary addTaskBtn");
       addTaskBtn.setAttribute("data-list-id", listId);
       inputGroup.appendChild(addTaskBtn);
 
@@ -136,10 +137,11 @@ async function getUserLists() {
 
       col.appendChild(oneListContainer);
       row.appendChild(col);
-      getListTasks(listId);
+      fetchListTasks(listId);
     });
 
     listsContainer.appendChild(row);
+    displayDeleteListMessage();
     addTasksAndDisplayMessage();
   }
 }
@@ -147,7 +149,7 @@ async function getUserLists() {
 refreshUserLists();
 
 async function refreshUserLists() {
-  await getUserLists();
+  await fetchUserLists();
   let onDelete = await displayDeleteListMessage();
 
   if (onDelete) {
@@ -157,7 +159,7 @@ async function refreshUserLists() {
   }
 }
 
-async function displayAddListMessage() {
+async function addListsAndDisplayMessage() {
   if (window.location.href.endsWith("lists.php")) {
     try {
       const addListBtn = document.querySelector("#addListBtn");
@@ -179,35 +181,31 @@ async function displayAddListMessage() {
             const jsonResponse = await response.json();
             container.textContent = jsonResponse.message;
 
-            if (jsonResponse.message === "Votre liste a bien été créée.") {
+            if (jsonResponse.message === "Liste créée !") {
               container.setAttribute("class", "alert alert-success");
               refreshMessages();
               const listsContainer = document.querySelector("#listsContainer");
               listsContainer.textContent = "";
-              getUserLists();
+              fetchUserLists();
             } else {
               container.setAttribute("class", "alert alert-danger");
+              displayDeleteListMessage();
               refreshMessages();
             }
-          } else {
-            throw new Error("Réponse HTTP non OK");
           }
         } catch (error) {
           console.error("Une erreur s'est produite :", error);
         }
       });
     } catch (error) {
-      console.error(
-        "Une erreur s'est produite lors de la recherche des éléments DOM :",
-        error
-      );
+      console.error("Une erreur s'est produite :", error);
     }
   }
 }
 
-displayAddListMessage();
+addListsAndDisplayMessage();
 
-async function getListTasks(listId) {
+async function fetchListTasks(listId) {
   if (window.location.href.endsWith("lists.php")) {
     const tasksResponse = await fetch("lists.php?getListTasks&id=" + listId);
     const jsonTasks = await tasksResponse.json();
@@ -220,8 +218,43 @@ async function getListTasks(listId) {
       );
 
       const oneTaskContainer = document.createElement("li");
-      oneTaskContainer.textContent = task.name;
       tasksContainer.appendChild(oneTaskContainer);
+
+      let taskId = task.id;
+
+      const taskName = document.createElement("span");
+      taskName.textContent = task.name;
+      taskName.setAttribute("id", `taskName-${taskId}`);
+      taskName.style.marginRight = "10px";
+      oneTaskContainer.appendChild(taskName);
+
+      const taskDueDate = document.createElement("span");
+      taskDueDate.textContent = " Due date : " + formatDate(task.due_date);
+      console.log(task.due_date);
+      taskDueDate.setAttribute("id", `taskDueDate-${taskId}`);
+      oneTaskContainer.appendChild(taskDueDate);
+
+      const taskStatusForm = document.createElement("form");
+      taskStatusForm.setAttribute("class", "checkTaskForm");
+      taskStatusForm.setAttribute("action", "");
+      taskStatusForm.setAttribute("method", "POST");
+      oneTaskContainer.appendChild(taskStatusForm);
+
+      const taskStatusBtn = document.createElement("button");
+      taskStatusBtn.setAttribute("class", "btn-primary small-checkTaskBtn");
+      taskStatusBtn.setAttribute("type", "button");
+      taskStatusBtn.setAttribute("name", "checkTaskBtn");
+      taskStatusBtn.style.marginRight = "10px";
+
+      taskStatusBtn.setAttribute("data-task-id", taskId);
+
+      let taskStatus = task.status;
+      taskStatusBtn.setAttribute("value", taskStatus);
+      taskStatusForm.appendChild(taskStatusBtn);
+
+      let i = document.createElement("i");
+      i.setAttribute("class", "fa-solid fa-xs fa-check");
+      taskStatusBtn.appendChild(i);
     });
   }
 }
@@ -267,18 +300,49 @@ async function addTasksAndDisplayMessage() {
 
         let taskId = jsonResponse.taskId;
 
-        if (jsonResponse.message == "La tâche a bien été ajoutée.") {
+        if (jsonResponse.message == "Tâche ajoutée !") {
           container.setAttribute("class", "alert alert-success");
 
           const tasksContainer = document.querySelector(
             `#tasksContainer-${listId}`
           );
           const oneTaskContainer = document.createElement("li");
-          oneTaskContainer.textContent = newTaskName;
+
+          const taskName = document.createElement("span");
+          taskName.textContent = newTaskName;
+          taskName.style.marginRight = "10px";
+          taskName.setAttribute("id", `taskName-${taskId}`);
+          oneTaskContainer.appendChild(taskName);
+
+          const taskDueDate = document.createElement("span");
+          taskDueDate.textContent = "Due date : " + formatDate(dueDateNewTask);
+          taskDueDate.setAttribute("id", `taskDueDate-${taskId}`);
+          oneTaskContainer.appendChild(taskDueDate);
+
+          const taskStatusForm = document.createElement("form");
+          taskStatusForm.setAttribute("class", "checkTaskForm");
+          taskStatusForm.setAttribute("action", "");
+          taskStatusForm.setAttribute("method", "POST");
+          oneTaskContainer.appendChild(taskStatusForm);
+
+          const taskStatusBtn = document.createElement("button");
+          taskStatusBtn.setAttribute("class", "btn-primary small-checkTaskBtn");
+          taskStatusBtn.setAttribute("type", "button");
+          taskStatusBtn.setAttribute("name", "checkTaskBtn");
+          taskStatusBtn.setAttribute("data-task-id", taskId);
+
+          let taskStatus = jsonResponse.status;
+          taskStatusBtn.setAttribute("value", taskStatus);
+          taskStatusBtn.style.marginRight = "10px";
+          taskStatusForm.appendChild(taskStatusBtn);
+
+          let i = document.createElement("i");
+          i.setAttribute("class", "fa-solid fa-xs fa-check");
+          taskStatusBtn.appendChild(i);
+
           tasksContainer.appendChild(oneTaskContainer);
 
           refreshMessages();
-
           updateTaskStatus();
         } else {
           container.setAttribute("class", "alert alert-danger");
