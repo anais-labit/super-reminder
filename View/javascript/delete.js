@@ -38,43 +38,49 @@ async function displayDeleteUserMessage() {
 displayDeleteUserMessage();
 
 async function displayDeleteListMessage() {
-  try {
-    if (window.location.href.endsWith("lists.php")) {
-      const deleteListButtons = document.querySelectorAll(".deleteListBtn");
+  if (window.location.href.endsWith("lists.php")) {
+    try {
+      const deleteListBtns = document.querySelectorAll(".deleteListBtns");
 
-      deleteListButtons.forEach((deleteListBtn) => {
-        deleteListBtn.addEventListener("click", async function (event) {
-          event.preventDefault();
+      return new Promise(async (resolve, reject) => {
+        deleteListBtns.forEach((button) => {
+          button.addEventListener("click", async (event) => {
+            event.preventDefault();
+            const listId = button.getAttribute("id");
+            const url = "lists.php?deleteList=" + listId;
+            const request = new Request(url, { method: "DELETE" });
+            try {
+              const responseData = await fetch(request);
+              if (responseData.ok) {
+                const jsonResponse = await responseData.json();
 
-          const listId = deleteListBtn.getAttribute("data-list-id");
+                const container = document.querySelector("#message");
+                container.setAttribute("class", "alert alert-success");
+                container.textContent = jsonResponse.message;
+                
+                const listToRemove = document.querySelector(`#list-${listId}`);
+                if (listToRemove) {
+                  listToRemove.remove();
+                }
+                refreshMessages();
 
-          const formData = new FormData();
-          formData.append("submitDeleteListForm", "");
-          formData.append("postId", listId);
+                resolve(true); 
+              } else {
+                reject("Échec de la suppression de la liste");
+                container.setAttribute("class", "alert alert-danger");
 
-          const response = await fetch("lists.php", {
-            method: "POST",
-            body: formData,
+                refreshMessages();
+              }
+            } catch (error) {
+              reject(error);
+            }
           });
-
-          const jsonResponse = await response.json();
-
-          const container = document.querySelector("#message");
-          container.textContent = jsonResponse.message;
-
-          if (jsonResponse.message == "La liste a bien été supprimée.") {
-            container.setAttribute("class", "alert alert-success");
-            setTimeout(function () {
-              window.location.href = "lists.php";
-            }, 1300);
-          }
         });
       });
+    } catch (error) {
+      console.error("Une erreur s'est produite :", error);
+      return false; 
     }
-  } catch (error) {
-    console.error("Une erreur s'est produite :", error);
   }
 }
-
 displayDeleteListMessage();
-

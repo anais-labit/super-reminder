@@ -1,4 +1,4 @@
-async function displayRegisterUserMessage() {
+async function displayRegistrationMessage() {
   try {
     if (window.location.href.endsWith("inscription.php")) {
       const response = await fetch("inscription.php");
@@ -40,49 +40,248 @@ async function displayRegisterUserMessage() {
   }
 }
 
-displayRegisterUserMessage();
+displayRegistrationMessage();
 
-async function displayAddListMessage() {
-  try {
-    if (window.location.href.endsWith("lists.php")) {
-      const response = await fetch("lists.php");
-      const content = await response.text();
+async function fetchUserLists() {
+  if (window.location.href.endsWith("lists.php")) {
+    const response = await fetch("lists.php?getUserLists");
+    const jsonLists = await response.json();
 
+    const listsContainer = document.querySelector("#listsContainer");
+
+    const row = document.createElement("div");
+    row.classList.add("row");
+
+    jsonLists.forEach((list) => {
+      let listId = list.id;
+
+      const col = document.createElement("div");
+      col.classList.add("col-md-4", "mb-4");
+
+      const oneListContainer = document.createElement("div");
+      oneListContainer.setAttribute("id", `list-${listId}`);
+      oneListContainer.classList.add("card");
+
+      const cardBody = document.createElement("div");
+      cardBody.classList.add("card-body", "input-group");
+ 
+      const listTitle = document.createElement("h5");
+      listTitle.classList.add("card-title");
+      listTitle.textContent = list.name;
+
+      cardBody.appendChild(listTitle);
+
+      const cardFooter = document.createElement("div");
+      cardFooter.classList.add("card-footer");
+
+      const deleteListButton = document.createElement("button");
+      deleteListButton.classList.add(
+        "btn",
+        "btn-danger",
+        "deleteListBtns",
+        "ml-auto"
+      );
+      deleteListButton.setAttribute("id", listId);
+      const i = document.createElement("i");
+      i.setAttribute("class", "fa-solid fa-trash");
+      deleteListButton.appendChild(i);
+
+      cardBody.appendChild(deleteListButton);
+
+      oneListContainer.appendChild(cardBody);
+      oneListContainer.appendChild(cardFooter);
+
+      const form = document.createElement("form");
+      form.setAttribute("action", "");
+      form.setAttribute("method", "POST");
+      form.setAttribute("class", "addTaskForm");
+      form.setAttribute("data-list-id", listId);
+      oneListContainer.appendChild(form);
+
+      const inputGroup = document.createElement("div");
+      inputGroup.setAttribute("class", "input-group mb-3 mx-auto");
+      inputGroup.style.width = "96%";
+      form.appendChild(inputGroup);
+
+      const taskInput = document.createElement("input");
+      taskInput.setAttribute("type", "text");
+      taskInput.setAttribute("class", "form-control");
+      taskInput.setAttribute("id", `newTaskName-${listId}`);
+      taskInput.setAttribute("name", `newTaskName-${listId}`);
+      taskInput.setAttribute("placeholder", "Ajouter une tâche");
+      inputGroup.appendChild(taskInput);
+
+      const taskDueDateInput = document.createElement("input");
+      taskDueDateInput.setAttribute("type", "date");
+      taskDueDateInput.setAttribute("class", "form-control");
+      taskDueDateInput.setAttribute("id", `dueDateNewTask-${listId}`);
+      taskDueDateInput.setAttribute("name", `dueDateNewTask-${listId}`);
+      inputGroup.appendChild(taskDueDateInput);
+
+      const addTaskBtn = document.createElement("button");
+      addTaskBtn.setAttribute("type", "button");
+      addTaskBtn.setAttribute("name", "addTaskBtn");
+      addTaskBtn.setAttribute("class", "btn-primary addTaskBtn");
+      addTaskBtn.setAttribute("data-list-id", listId);
+      inputGroup.appendChild(addTaskBtn);
+
+      const plusIcon = document.createElement("i");
+      plusIcon.setAttribute("class", "fa-solid fa-xs fa-plus");
+      addTaskBtn.appendChild(plusIcon);
+
+      const tasksContainer = document.createElement("ul");
+      tasksContainer.setAttribute("id", `tasksContainer-${listId}`);
+      oneListContainer.appendChild(tasksContainer);
+
+      col.appendChild(oneListContainer);
+      row.appendChild(col);
+      fetchListTasks(listId);
+    });
+
+    listsContainer.appendChild(row);
+    displayDeleteListMessage();
+    addTasksAndDisplayMessage();
+  }
+}
+
+refreshUserLists();
+
+async function refreshUserLists() {
+  await fetchUserLists();
+  let onDelete = await displayDeleteListMessage();
+
+  if (onDelete) {
+    const listsContainer = document.querySelector("#listsContainer");
+    listsContainer.innerHTML = "";
+    await refreshUserLists();
+  }
+}
+
+async function addListsAndDisplayMessage() {
+  if (window.location.href.endsWith("lists.php")) {
+    try {
       const addListBtn = document.querySelector("#addListBtn");
       const form = document.querySelector("#addListForm");
+      const container = document.querySelector("#message");
 
       addListBtn.addEventListener("click", async function (event) {
         event.preventDefault();
         const data = new FormData(form);
-        data.append("submitAddListForm", "");
+        data.append("submitAddListForm", "submitAddListForm");
 
-        const response = await fetch("lists.php", {
-          method: "POST",
-          body: data,
-        });
+        try {
+          const response = await fetch("lists.php", {
+            method: "POST",
+            body: data,
+          });
 
-        const jsonResponse = await response.json();
+          if (response.ok) {
+            const jsonResponse = await response.json();
+            container.textContent = jsonResponse.message;
 
-        const container = document.querySelector("#message");
-        container.textContent = jsonResponse.message;
-
-        if (jsonResponse.message == "Votre liste a bien été créée.") {
-          container.setAttribute("class", "alert alert-success");
-          setTimeout(function () {
-            window.location.href = "lists.php";
-          }, 1300);
-        } else {
-          container.setAttribute("class", "alert alert-danger");
+            if (jsonResponse.message === "Liste créée !") {
+              container.setAttribute("class", "alert alert-success");
+              refreshMessages();
+              const listsContainer = document.querySelector("#listsContainer");
+              listsContainer.textContent = "";
+              fetchUserLists();
+            } else {
+              container.setAttribute("class", "alert alert-danger");
+              displayDeleteListMessage();
+              refreshMessages();
+            }
+          }
+        } catch (error) {
+          console.error("Une erreur s'est produite :", error);
         }
       });
+    } catch (error) {
+      console.error("Une erreur s'est produite :", error);
     }
-  } catch (error) {
-    console.error("Une erreur s'est produite :", error);
   }
 }
 
-displayAddListMessage();
+addListsAndDisplayMessage();
 
+async function fetchListTasks(listId) {
+  if (window.location.href.endsWith("lists.php")) {
+    const tasksResponse = await fetch("lists.php?getListTasks&id=" + listId);
+    const jsonTasks = await tasksResponse.json();
+
+    jsonTasks.forEach((task) => {
+      const tasksContainer = document.querySelector(
+        `#tasksContainer-${listId}`
+      );
+      tasksContainer.classList.add("list-group");
+
+      const oneTaskContainer = document.createElement("li");
+      oneTaskContainer.classList.add(
+        "list-group-item",
+        "d-flex",
+        "justify-content-between",
+        "align-items-center"
+      );
+      tasksContainer.appendChild(oneTaskContainer);
+
+      let taskId = task.id;
+
+      const taskName = document.createElement("span");
+      taskName.classList.add("flex-grow-1", "mr-2");
+      taskName.textContent = task.name;
+      taskName.setAttribute("id", `taskName-${taskId}`);
+      taskName.style.marginRight = "10px";
+      oneTaskContainer.appendChild(taskName);
+
+      const taskDueDate = document.createElement("span");
+      taskDueDate.classList.add(
+        "badge",
+        "badge-primary",
+        "badge-pill",
+        "due-date"
+      );
+      taskDueDate.setAttribute("id", `taskDueDate-${taskId}`);
+      oneTaskContainer.appendChild(taskDueDate);
+
+      const clockIcon = document.createElement("i");
+      clockIcon.classList.add("fa-regular", "fa-clock"); 
+
+      taskDueDate.appendChild(clockIcon); 
+      taskDueDate.appendChild(
+        document.createTextNode (" " + (formatDate(task.due_date)))
+      ); 
+
+      const taskStatusForm = document.createElement("form");
+      taskStatusForm.setAttribute("class", "checkTaskForm");
+      taskStatusForm.setAttribute("action", "");
+      taskStatusForm.setAttribute("method", "POST");
+      oneTaskContainer.appendChild(taskStatusForm);
+
+      const taskStatusBtn = document.createElement("button");
+      taskStatusBtn.setAttribute("class", "btn-primary small checkTaskBtn");
+      taskStatusBtn.setAttribute("type", "button");
+      taskStatusBtn.setAttribute("name", "checkTaskBtn");
+      taskStatusBtn.style.marginRight = "10px";
+
+      taskStatusBtn.setAttribute("data-task-id", taskId);
+
+      let taskStatus = task.status;
+      taskStatusBtn.setAttribute("value", taskStatus);
+      taskStatusForm.appendChild(taskStatusBtn);
+
+      let i = document.createElement("i");
+      i.setAttribute("class", "fa-solid fa-xs fa-check");
+      taskStatusBtn.appendChild(i);
+
+      if (task.status == "1") {
+        taskName.classList.add("doneTask");
+        taskDueDate.classList.add("doneTask");
+        i.classList.remove("fa-check");
+        i.classList.add("fa-arrows-rotate");
+      }
+      updateTaskStatus();
+    });
+  }
+}
 async function addTasksAndDisplayMessage() {
   if (window.location.href.endsWith("lists.php")) {
     const addTaskBtns = document.querySelectorAll(".addTaskBtn");
@@ -91,12 +290,13 @@ async function addTasksAndDisplayMessage() {
       button.addEventListener("click", async function (event) {
         event.preventDefault();
 
-        let listId = button.getAttribute("data-list-id");
-        let tasksContainer = document.querySelector(
-          `#tasksContainer-${listId}`
-        );
+        const clickedButton = event.target;
+        const form = clickedButton.closest("form");
+
+        const listId = form.getAttribute("data-list-id");
+
         let newTaskNameInput = document.querySelector(`#newTaskName-${listId}`);
-        const dueDateNewTaskInput = document.querySelector(
+        let dueDateNewTaskInput = document.querySelector(
           `#dueDateNewTask-${listId}`
         );
 
@@ -121,54 +321,78 @@ async function addTasksAndDisplayMessage() {
 
         let taskId = jsonResponse.taskId;
 
-        if (jsonResponse.message == "La tâche a bien été ajoutée.") {
+        if (jsonResponse.message == "Tâche ajoutée !") {
           container.setAttribute("class", "alert alert-success");
 
-          const task = document.createElement("p");
-          task.textContent = newTaskName;
-          task.setAttribute("id", `taskName-${taskId}`);
-          tasksContainer.appendChild(task);
+          const tasksContainer = document.querySelector(
+            `#tasksContainer-${listId}`
+          );
+          const oneTaskContainer = document.createElement("li");
+          oneTaskContainer.classList.add(
+            "list-group-item",
+            "d-flex",
+            "justify-content-between",
+            "align-items-center",
+            "w-100"
+          );
+
+          const taskName = document.createElement("span");
+          taskName.classList.add("flex-grow-1", "mr-2");
+          taskName.textContent = newTaskName;
+          taskName.style.marginRight = "10px";
+          taskName.setAttribute("id", `taskName-${taskId}`);
+          oneTaskContainer.appendChild(taskName);
 
           const taskDueDate = document.createElement("span");
-          taskDueDate.textContent = " Due date : " + formatDate(dueDateNewTask);
-          task.appendChild(taskDueDate);
+          taskDueDate.classList.add(
+            "badge",
+            "badge-primary",
+            "badge-pill",
+            "due-date"
+          );
+          taskDueDate.setAttribute("id", `taskDueDate-${taskId}`);
 
-          // const deleteTaskBtn = document.createElement("button");
-          // deleteTaskBtn.setAttribute("class", "fa-solid fa-trash");
-          // task.appendChild(deleteTaskBtn);
+          const clockIcon = document.createElement("i");
+          clockIcon.classList.add("fa-regular", "fa-clock"); 
+
+          taskDueDate.appendChild(clockIcon); 
+
+          taskDueDate.appendChild(
+            document.createTextNode(" " + (formatDate(dueDateNewTask)))
+          );
+
+          oneTaskContainer.appendChild(taskDueDate);
 
           const taskStatusForm = document.createElement("form");
           taskStatusForm.setAttribute("class", "checkTaskForm");
           taskStatusForm.setAttribute("action", "");
           taskStatusForm.setAttribute("method", "POST");
-
-          tasksContainer.appendChild(taskStatusForm);
+          oneTaskContainer.appendChild(taskStatusForm);
 
           const taskStatusBtn = document.createElement("button");
-          taskStatusBtn.setAttribute("class", "btn btn-primary checkTaskBtn");
-          taskStatusBtn.setAttribute("type", "submit");
+          taskStatusBtn.setAttribute("class", "btn-primary small checkTaskBtn");
+          taskStatusBtn.setAttribute("type", "button");
           taskStatusBtn.setAttribute("name", "checkTaskBtn");
           taskStatusBtn.setAttribute("data-task-id", taskId);
+
           let taskStatus = jsonResponse.status;
           taskStatusBtn.setAttribute("value", taskStatus);
+          taskStatusBtn.style.marginRight = "10px";
           taskStatusForm.appendChild(taskStatusBtn);
 
           let i = document.createElement("i");
-          i.setAttribute("class", "fa-solid fa-check");
+          i.setAttribute("class", "fa-solid fa-xs fa-check");
           taskStatusBtn.appendChild(i);
 
+          tasksContainer.appendChild(oneTaskContainer);
+          refreshMessages();
           updateTaskStatus();
         } else {
           container.setAttribute("class", "alert alert-danger");
+          refreshMessages();
         }
       });
     });
   }
 }
 
-addTasksAndDisplayMessage();
-
-function formatDate(dateString) {
-  const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-  return new Date(dateString).toLocaleDateString("fr-FR", options);
-}

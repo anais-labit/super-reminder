@@ -41,3 +41,16 @@ async function displayLoginUserMessage() {
 }
 
 displayLoginUserMessage();
+
+async function refreshMessages() {
+  setTimeout(function () {
+    const container = document.querySelector("#message");
+    container.textContent = "";
+    container.removeAttribute("class");
+  }, 1300);
+}
+
+function formatDate(dateString) {
+  const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+  return new Date(dateString).toLocaleDateString("fr-FR", options);
+}

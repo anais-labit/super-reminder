@@ -32,9 +32,9 @@ class ListController
             $listModel->createList($listName, $idUser);
             echo json_encode([
                 "success" => true,
-                "message" => "Votre liste a bien été créée."
+                "message" => "Liste créée !"
             ]);
-        } elseif (empty($listName)) {
+        } else if (empty($listName)) {
             echo json_encode([
                 "success" => false,
                 "message" => "La liste doit porter un nom."
@@ -47,20 +47,19 @@ class ListController
         }
     }
 
-
-    function displayUserLists(int $idUser): ?array
+    function displayUserLists(int $idUser)
     {
         $userLists = new ListModel();
         $result = $userLists->getUserLists($idUser);
-
-        return $result;
+        echo json_encode($result);
     }
 
 
-    function deleteList(int $idList, int $idUser): void
+    function deleteList(string $idList, int $idUser): void
     {
         $delete = new ListModel();
         $delete->deleteLists($idList, $idUser);
-        echo json_encode(['message' => 'La liste a bien été supprimée.']);
+        
+        echo json_encode(['message' => 'Liste et tâches supprimées !']);
     }
 }

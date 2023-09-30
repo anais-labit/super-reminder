@@ -28,12 +28,12 @@ class TaskController
                 $status = 0;
 
                 $newTask = new TaskModel();
-                $newlyCreatedTaskId = $newTask->createTask($taskName, $date, $dueDate, $tag, $idList, $status); 
+                $newlyCreatedTaskId = $newTask->createTask($taskName, $date, $dueDate, $tag, $idList, $status);
 
                 echo json_encode([
                     "success" => true,
-                    "message" => "La tâche a bien été ajoutée.",
-                    'taskId' => $newlyCreatedTaskId, 
+                    "message" => "Tâche ajoutée !",
+                    'taskId' => $newlyCreatedTaskId,
                     "status" => $status
                 ]);
             }
@@ -46,18 +46,28 @@ class TaskController
     }
 
 
-    public function displayListTasks(int $idList): ?array
+    public function displayListTasks($idList)
     {
         $listTasks = new TaskModel();
-        $result = $listTasks->getListTasks($idList);
+        $tasks = $listTasks->getListTasks($idList);
 
-        return $result;
+        return $tasks;
     }
 
     public function changeTaskStatus(int $idTask, int $status): void
     {
         $taskStatus = new TaskModel();
-        $taskStatus->updateTaskStatus($idTask, $status);
 
+        if ($status == 0) {
+            $newStatus = 1;
+        } else {
+            $newStatus = 0;
+        }
+        $taskStatus->updateTaskStatus($idTask, $newStatus);
+
+        echo json_encode([
+            "success" => true,
+            "message" => "Status mis à jour ! ", 
+        ]);
     }
 }
