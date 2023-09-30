@@ -63,8 +63,8 @@ async function fetchUserLists() {
       oneListContainer.classList.add("card");
 
       const cardBody = document.createElement("div");
-      cardBody.classList.add("card-body");
-
+      cardBody.classList.add("card-body", "input-group");
+ 
       const listTitle = document.createElement("h5");
       listTitle.classList.add("card-title");
       listTitle.textContent = list.name;
@@ -99,8 +99,8 @@ async function fetchUserLists() {
       oneListContainer.appendChild(form);
 
       const inputGroup = document.createElement("div");
-      inputGroup.setAttribute("class", "input-group mx-auto");
-      inputGroup.style.width = "95%";
+      inputGroup.setAttribute("class", "input-group mb-3 mx-auto");
+      inputGroup.style.width = "96%";
       form.appendChild(inputGroup);
 
       const taskInput = document.createElement("input");
@@ -132,8 +132,6 @@ async function fetchUserLists() {
       const tasksContainer = document.createElement("ul");
       tasksContainer.setAttribute("id", `tasksContainer-${listId}`);
       oneListContainer.appendChild(tasksContainer);
-
-      displayDeleteListMessage();
 
       col.appendChild(oneListContainer);
       row.appendChild(col);
@@ -210,29 +208,47 @@ async function fetchListTasks(listId) {
     const tasksResponse = await fetch("lists.php?getListTasks&id=" + listId);
     const jsonTasks = await tasksResponse.json();
 
-    console.log(jsonTasks);
-
     jsonTasks.forEach((task) => {
       const tasksContainer = document.querySelector(
         `#tasksContainer-${listId}`
       );
+      tasksContainer.classList.add("list-group");
 
       const oneTaskContainer = document.createElement("li");
+      oneTaskContainer.classList.add(
+        "list-group-item",
+        "d-flex",
+        "justify-content-between",
+        "align-items-center"
+      );
       tasksContainer.appendChild(oneTaskContainer);
 
       let taskId = task.id;
 
       const taskName = document.createElement("span");
+      taskName.classList.add("flex-grow-1", "mr-2");
       taskName.textContent = task.name;
       taskName.setAttribute("id", `taskName-${taskId}`);
       taskName.style.marginRight = "10px";
       oneTaskContainer.appendChild(taskName);
 
       const taskDueDate = document.createElement("span");
-      taskDueDate.textContent = " Due date : " + formatDate(task.due_date);
-      console.log(task.due_date);
+      taskDueDate.classList.add(
+        "badge",
+        "badge-primary",
+        "badge-pill",
+        "due-date"
+      );
       taskDueDate.setAttribute("id", `taskDueDate-${taskId}`);
       oneTaskContainer.appendChild(taskDueDate);
+
+      const clockIcon = document.createElement("i");
+      clockIcon.classList.add("fa-regular", "fa-clock"); 
+
+      taskDueDate.appendChild(clockIcon); 
+      taskDueDate.appendChild(
+        document.createTextNode (" " + (formatDate(task.due_date)))
+      ); 
 
       const taskStatusForm = document.createElement("form");
       taskStatusForm.setAttribute("class", "checkTaskForm");
@@ -241,7 +257,7 @@ async function fetchListTasks(listId) {
       oneTaskContainer.appendChild(taskStatusForm);
 
       const taskStatusBtn = document.createElement("button");
-      taskStatusBtn.setAttribute("class", "btn-primary small-checkTaskBtn");
+      taskStatusBtn.setAttribute("class", "btn-primary small checkTaskBtn");
       taskStatusBtn.setAttribute("type", "button");
       taskStatusBtn.setAttribute("name", "checkTaskBtn");
       taskStatusBtn.style.marginRight = "10px";
@@ -255,10 +271,17 @@ async function fetchListTasks(listId) {
       let i = document.createElement("i");
       i.setAttribute("class", "fa-solid fa-xs fa-check");
       taskStatusBtn.appendChild(i);
+
+      if (task.status == "1") {
+        taskName.classList.add("doneTask");
+        taskDueDate.classList.add("doneTask");
+        i.classList.remove("fa-check");
+        i.classList.add("fa-arrows-rotate");
+      }
+      updateTaskStatus();
     });
   }
 }
-
 async function addTasksAndDisplayMessage() {
   if (window.location.href.endsWith("lists.php")) {
     const addTaskBtns = document.querySelectorAll(".addTaskBtn");
@@ -293,8 +316,6 @@ async function addTasksAndDisplayMessage() {
 
         const jsonResponse = await response.json();
 
-        console.log(jsonResponse);
-
         const container = document.querySelector("#message");
         container.textContent = jsonResponse.message;
 
@@ -307,16 +328,39 @@ async function addTasksAndDisplayMessage() {
             `#tasksContainer-${listId}`
           );
           const oneTaskContainer = document.createElement("li");
+          oneTaskContainer.classList.add(
+            "list-group-item",
+            "d-flex",
+            "justify-content-between",
+            "align-items-center",
+            "w-100"
+          );
 
           const taskName = document.createElement("span");
+          taskName.classList.add("flex-grow-1", "mr-2");
           taskName.textContent = newTaskName;
           taskName.style.marginRight = "10px";
           taskName.setAttribute("id", `taskName-${taskId}`);
           oneTaskContainer.appendChild(taskName);
 
           const taskDueDate = document.createElement("span");
-          taskDueDate.textContent = "Due date : " + formatDate(dueDateNewTask);
+          taskDueDate.classList.add(
+            "badge",
+            "badge-primary",
+            "badge-pill",
+            "due-date"
+          );
           taskDueDate.setAttribute("id", `taskDueDate-${taskId}`);
+
+          const clockIcon = document.createElement("i");
+          clockIcon.classList.add("fa-regular", "fa-clock"); 
+
+          taskDueDate.appendChild(clockIcon); 
+
+          taskDueDate.appendChild(
+            document.createTextNode(" " + (formatDate(dueDateNewTask)))
+          );
+
           oneTaskContainer.appendChild(taskDueDate);
 
           const taskStatusForm = document.createElement("form");
@@ -326,7 +370,7 @@ async function addTasksAndDisplayMessage() {
           oneTaskContainer.appendChild(taskStatusForm);
 
           const taskStatusBtn = document.createElement("button");
-          taskStatusBtn.setAttribute("class", "btn-primary small-checkTaskBtn");
+          taskStatusBtn.setAttribute("class", "btn-primary small checkTaskBtn");
           taskStatusBtn.setAttribute("type", "button");
           taskStatusBtn.setAttribute("name", "checkTaskBtn");
           taskStatusBtn.setAttribute("data-task-id", taskId);
@@ -341,7 +385,6 @@ async function addTasksAndDisplayMessage() {
           taskStatusBtn.appendChild(i);
 
           tasksContainer.appendChild(oneTaskContainer);
-
           refreshMessages();
           updateTaskStatus();
         } else {
@@ -352,3 +395,4 @@ async function addTasksAndDisplayMessage() {
     });
   }
 }
+

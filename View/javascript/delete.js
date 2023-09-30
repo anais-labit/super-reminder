@@ -64,7 +64,7 @@ async function displayDeleteListMessage() {
                 }
                 refreshMessages();
 
-                resolve(true); // Résoudre la promesse avec true si tout s'est bien passé
+                resolve(true); 
               } else {
                 reject("Échec de la suppression de la liste");
                 container.setAttribute("class", "alert alert-danger");
@@ -79,7 +79,7 @@ async function displayDeleteListMessage() {
       });
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
-      return false; // Renvoyer false en cas d'erreur
+      return false; 
     }
   }
 }

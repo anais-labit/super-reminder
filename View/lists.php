@@ -44,10 +44,10 @@ if (isset($_POST['addTaskBtn'])) {
     die();
 }
 
-// if (isset($_POST['checkTaskForm'])) {
-//     $taskController->changeTaskStatus($_POST['postTaskId'], $_POST['status']);
-//     die();
-// }
+if (isset($_POST['checkTaskForm'])) {
+    $taskController->changeTaskStatus($_POST['taskId'], $_POST['taskStatus']);
+    die();
+}
 
 ?>
 

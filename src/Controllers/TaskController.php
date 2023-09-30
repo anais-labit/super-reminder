@@ -28,12 +28,12 @@ class TaskController
                 $status = 0;
 
                 $newTask = new TaskModel();
-                $newlyCreatedTaskId = $newTask->createTask($taskName, $date, $dueDate, $tag, $idList, $status); 
+                $newlyCreatedTaskId = $newTask->createTask($taskName, $date, $dueDate, $tag, $idList, $status);
 
                 echo json_encode([
                     "success" => true,
                     "message" => "Tâche ajoutée !",
-                    'taskId' => $newlyCreatedTaskId, 
+                    'taskId' => $newlyCreatedTaskId,
                     "status" => $status
                 ]);
             }
@@ -65,5 +65,9 @@ class TaskController
         }
         $taskStatus->updateTaskStatus($idTask, $newStatus);
 
+        echo json_encode([
+            "success" => true,
+            "message" => "Status mis à jour ! ", 
+        ]);
     }
 }

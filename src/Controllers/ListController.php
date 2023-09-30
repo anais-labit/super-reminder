@@ -34,7 +34,7 @@ class ListController
                 "success" => true,
                 "message" => "Liste créée !"
             ]);
-        } elseif (empty($listName)) {
+        } else if (empty($listName)) {
             echo json_encode([
                 "success" => false,
                 "message" => "La liste doit porter un nom."
