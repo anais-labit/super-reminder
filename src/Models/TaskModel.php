@@ -8,23 +8,20 @@ use PDO;
 class TaskModel
 {
     private ?int $id;
-    private ?int $idUser;
-    private ?int $idList;
     private ?string $name;
-    private ?string $tagName;
-    private ?DateTime $date;
     private ?DateTime $dueDate;
+    private ?string $tag;
+    private ?int $idList;
+    private ?int $status;
 
-
-    public function __construct($id = null, $idUser = null, $idList = null, $name = null, $tagName = null, $date = null, $dueDate = null)
+    public function __construct($id = null, $name = null, $dueDate = null, $tag = null, $idList = null, $status = 0)
     {
         $this->id = $id;
-        $this->idUser = $idUser;
-        $this->idList = $idList;
         $this->name = $name;
-        $this->tagName = $tagName;
-        $this->date = $date;
         $this->dueDate = $dueDate;
+        $this->tag = $tag;
+        $this->idList = $idList;
+        $this->status = $status;
     }
 
     public function connectDb(): PDO
@@ -32,77 +29,39 @@ class TaskModel
         $conn = new DatabaseModel;
         return $conn->connect();
     }
+    public function createTask(string $name, string $date, string $dueDate, string $tag, $idList, int $status): int
+    {
+        $conn = $this->connectDb();
 
-    public function setId(?int $id): TaskModel
-    {
-        $this->id = $id;
-        return $this;
-    }
-    public function getId(): int
-    {
-        return $this->id;
-    }
+        $createList = $conn->prepare('INSERT INTO task (name, date, due_date, tag, id_list, status) VALUES (:name, NOW(), :due_date, :tag, :id_list, :status)');
+        $createList->bindValue(':name', $name);
+        $createList->bindValue(':due_date', $dueDate);
+        $createList->bindValue(':tag', $tag);
+        $createList->bindValue(':id_list', $idList);
+        $createList->bindValue(':status', $status);
+        $createList->execute();
 
-    public function setIdUser(?string $idUser): TaskModel
-    {
-        $this->idUser = $idUser;
-        return $this;
-    }
-    public function getidUser(): string
-    {
-        return $this->idUser;
+        $lastInsertId = $conn->lastInsertId();
+
+        return $lastInsertId;
     }
 
-    public function setName(?string $name): TaskModel
+    public function getListTasks($idList)
     {
-        $this->name = $name;
-        return $this;
-    }
-    public function getName(): string
-    {
-        return $this->name;
+        $getTasks = $this->connectDb()->prepare('SELECT id, name, due_date, status, id_list FROM task WHERE id_list = :id_list');
+        $getTasks->bindValue(':id_list', $idList);
+        $getTasks->execute();
+
+        $tasks = $getTasks->fetchAll(PDO::FETCH_ASSOC);
+
+        echo json_encode($tasks);
     }
 
-    public function setDate(?string $date): TaskModel
+    public function updateTaskStatus(int $idTask, int $newStatus): void
     {
-        $this->date = $date;
-        return $this;
+        $updateTaskStatus = $this->connectDb()->prepare('UPDATE task SET status = :status WHERE id = :id');
+        $updateTaskStatus->bindValue('id', $idTask);
+        $updateTaskStatus->bindValue('status', $newStatus);
+        $updateTaskStatus->execute();
     }
-    public function getDate(): DateTime
-    {
-        return $this->date;
-    }
-
-    public function setDueDate(?string $dueDate): TaskModel
-    {
-        $this->dueDate = $dueDate;
-        return $this;
-    }
-    public function getDueDate(): DateTime
-    {
-        return $this->dueDate;
-    }
-
-    public function setTagName(?string $tagName): TaskModel
-    {
-        $this->tagName = $tagName;
-        return $this;
-    }
-    public function getTagName(): string
-    {
-        return $this->tagName;
-    }
-
-    public function setIdList(?int $idList): TaskModel
-    {
-        $this->idList = $idList;
-        return $this;
-    }
-    public function getIdList(): ?int
-    {
-        return $this->idList;
-    }
-
-
-    
 }

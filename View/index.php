@@ -17,7 +17,7 @@ if (isset($_GET['logOut'])) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Faux Site</title>
+    <title>Super-Reminder</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
@@ -42,7 +42,8 @@ if (isset($_GET['logOut'])) {
                             <a href="./admin.php" class="btn btn-primary mt-3">Voir la liste des utilisateurs</a>
                         <?php } else { ?>
                             <div>
-                                <p>Maintenant que vous avez créé votre compte, vous pouvez modifier vos informations personnelles. </p>
+                                <p>Maintenant que vous avez créé un compte, vous pouvez créer vos To-Do-Lists et modifier vos informations personnelles.</p>
+                                <a href="./lists.php" class="btn btn-primary">Créer mes ToDoLists</a>
                                 <a href="./profil.php" class="btn btn-primary">Gérer mon profil</a>
                             </div>
                             <p><br></p>
@@ -61,7 +62,7 @@ if (isset($_GET['logOut'])) {
                         <section>
                             <h2>Description du projet :</h2>
                             <p>
-                                Dans ce projet, j'ai développé un module de connexion complet qui permet aux utilisateurs de créer leur compte, de se connecter et de gérer leurs informations personnelles.
+                                Dans ce projet, j'ai développé une super To-Do-List qui permet aux utilisateurs de créer des listes et des tâches associées.
                             </p>
                             <p>Vous trouverez le détail des étapes suivies en cliquant sur "En savoir plus".</p>
                             <p>Le lien vers le repo GitHub se trouve dans le footer.</p>
@@ -72,45 +73,56 @@ if (isset($_GET['logOut'])) {
                             <a href="./inscription.php" class="btn btn-primary">Créer un compte</a>
                             <div id="voirPlus" class="collapse">
 
-                                <h5><br>Étape 1 : Configuration de la Base de Données</h5>
-                                <p>
-                                    Pour commencer, j'ai créé une base de données nommée "moduleconnexionb2" à l'aide de phpMyAdmin. À l'intérieur de cette base de données, j'ai créé une table "user" avec les champs suivants :
-                                </p>
-                                <ul>
-                                    <li><strong>id</strong> (clé primaire, auto-incrémentée)</li>
-                                    <li><strong>login</strong></li>
-                                    <li><strong>firstname</strong></li>
-                                    <li><strong>lastname</strong></li>
-                                    <li><strong>password</strong></li>
-                                </ul>
-                                <p>
-                                    J'ai également créé un utilisateur administrateur avec les informations de connexion suivantes :
-                                </p>
-                                <ul>
-                                    <li>Login : "admiN1337$"</li>
-                                    <li>Prénom : "Admin"</li>
-                                    <li>Nom : "Admin"</li>
-                                    <li>Mot de passe : "admiN1337$"</li>
-                                </ul>
-                                <h5>Étape 2 : Pages du Projet</h5>
-                                <p>
-                                    J'ai développé plusieurs pages pour mon projet :
-                                </p>
-                                <ul>
-                                    <li><strong>Page d'Accueil (index.php) :</strong> Cette page présente mon site et explique son fonctionnement.</li>
-                                    <li><strong>Page d'Inscription (inscription.php) :</strong> J'ai créé un formulaire d'inscription complet qui collecte les informations de l'utilisateur, y compris la confirmation du mot de passe. J'ai mis en place des règles de validation pour le mot de passe, et les logins doivent être uniques en base de données. Une fois l'utilisateur remplit ce formulaire, ses données sont insérées dans la base de données, et il est redirigé vers la page de connexion.</li>
-                                    <li><strong>Page de Connexion (connexion.php) :</strong> Cette page contient un formulaire de connexion avec deux champs : "login" et "password". Lorsque l'utilisateur soumet le formulaire avec les informations correctes, il est considéré comme connecté, et des variables de session sont créées.</li>
-                                    <li><strong>Page de Modification du Profil (profil.php) :</strong> Les utilisateurs connectés peuvent utiliser cette page pour modifier leurs informations personnelles. Le formulaire est pré-rempli avec les informations actuellement stockées en base de données.</li>
-                                    <li><strong>Page d'Administration (admin.php) :</strong> Cette page est accessible uniquement par l'utilisateur "admin". Elle permet d'afficher la liste complète des informations des utilisateurs présents dans la base de données.</li>
-                                </ul>
-                                <h5>Approche Orientée Objet :</h5>
-                                <p>
-                                    J'ai utilisé la programmation orientée objet (POO) pour développer ce projet. J'ai créé une classe User pour représenter les utilisateurs, ce qui m'a permis de structurer mon code de manière efficace.
-                                </p>
-                                <h5>Design et Sécurité :</h5>
-                                <p>
-                                    J'ai veillé à ce que le site ait une structure HTML correcte et un design soigné grâce à Bootstrap. J'ai choisi un thème adapté à mon projet. De plus, toutes les requêtes ont été sécurisées pour se prémunir contre d'éventuelles attaques.
-                                </p>
+                                <article>
+                                    <section>
+                                        <h5><br>Objectifs Atteints</h5>
+                                        <p>J'ai mis en place les fonctionnalités essentielles suivantes :</p>
+                                        <ul>
+                                            <li>Un système d'inscription et de connexion</li>
+                                            <li>L'affichage d'une liste de tâches à accomplir</li>
+                                            <li>La possibilité d'ajouter de nouvelles tâches à réaliser</li>
+                                            <li>La gestion de l'état des tâches (par exemple : à faire, terminée)</li>
+                                        </ul>
+                                    </section>
+                                    <section>
+                                        <h5>Design Professionnel</h5>
+                                        <p>J'ai veillé à ce que le site soit professionnel tout en restant simple et fonctionnel. Il est conçu de manière à être réactif, assurant une expérience utilisateur optimale, quelle que soit la plateforme utilisée.</p>
+                                    </section>
+
+                                    <section>
+                                        <h5>Fonctionnalités Additionnelles (Optionnelles)</h5>
+                                        <p>En plus des fonctionnalités de base, mon projet offre la possibilité d'aller encore plus loin si nécessaire :</p>
+                                        <ul>
+                                            <li>La création de plusieurs listes de tâches</li>
+                                            <li>L'ajout de dates d'échéance pour les tâches</li>
+                                        </ul>
+                                    </section>
+                                </article>
+                                <section>
+                                    <h5>Configuration de la Base de Données :</h5>
+                                    <p>J'ai choisi de créer 3 tables pour ce projet :
+                                    <ul>
+                                        <li>user : qui contient toutes les informations relatives à un utilisateur</li>
+                                        <li>list : qui permet de créer des nouvelles listes de tâches</li>
+                                        <li>task : qui permet de créer de nouvelles tâches</li>
+                                    </ul>
+                                </section>
+                                <section>
+                                    <h5>Architecture Model View Controller :</h5>
+                                    <p>J'ai opté pour la mise en place d'une architecture MVC afin de séparer clairement la logique métier de l'affichage, garantissant ainsi une structure de code plus organisée et compréhensible. Cela permet de séparer les conditions et instanciations php du html ainsi que de convoquer uniquement les méthodes spécifiques à la page sur laquelle agit l'utilisateur </p>
+                                </section>
+                                <section>
+                                    <h5>Approche Orientée Objet :</h5>
+                                    <p>
+                                        J'ai utilisé la programmation orientée objet (POO) pour développer ce projet. J'ai créé une classe Database pour la connexion à la base de données, une classe User pour représenter les utilisateurs, une classe List et une classe Task, ce qui m'a permis de structurer le code de manière efficace.
+                                    </p>
+                                </section>
+                                <section>
+                                    <h5>Sécurité :</h5>
+                                    <p>
+                                        Toutes les requêtes ont été sécurisées pour se prémunir contre d'éventuelles attaques et toutes les données saisies côté client ont été nettoyées avant insertion.
+                                    </p>
+                                </section>
                             </div>
                         </section>
                     <?php } ?>

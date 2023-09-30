@@ -160,7 +160,6 @@ class UserModel
 
         $requestUpdateOne = "UPDATE user SET $requestString WHERE login = :login";
         $queryUpdateOne = $this->connectDb()->prepare($requestUpdateOne);
-        // var_dump($queryUpdateOne);
         $queryUpdateOne->execute($params);
     }
 

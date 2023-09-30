@@ -39,8 +39,25 @@ body {
   text-align: justify;
 }
 
+.due-date {
+  margin-right: 15px; 
+}
+
+.doneTask {
+  text-decoration: line-through;
+  background-color: #f2f2f2;
+  color: #888;
+  font-style: italic;
+}
+
+.custom-container {
+  border: 2px solid #F2F2F2;
+  border-radius: 10px;
+  padding: 15px;
+  background-color: #fff;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+}
+
 footer {
   flex-shrink: 0;
 }
-
-

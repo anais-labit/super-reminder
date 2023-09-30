@@ -28,8 +28,7 @@ if (isset($_POST['deleteForm'])) {
     <link rel="stylesheet" href="./css/style.css">
     <script defer src="./javascript/update.js"></script>
     <script defer src="./javascript/delete.js"></script>
-
-    <title>Profil</title>
+    <title>Super-Reminder</title>
 </head>
 
 <header class="gl-header"> <?php include './includes/header.php' ?></header>
@@ -39,6 +38,7 @@ if (isset($_POST['deleteForm'])) {
         <div class="container mt-5">
             <form action="" method="POST" id="updateForm">
                 <h2 class="text-center">Gestion du Profil</h2>
+                <p id="message"></p>
                 <div class="mb-3">
                     <label for="login" class="form-label">Login</label>
                     <input type="text" class="form-control" id="newLogin" placeholder="<?= ucwords($_SESSION['user']->getLogin()) ?>" readonly>
@@ -66,13 +66,11 @@ if (isset($_POST['deleteForm'])) {
             <form action="" method="POST" id="deleteForm">
                 <button type="submit" name="deleteButton" id="deleteButton" class="btn btn-danger">Supprimer le Compte</button>
             </form>
-            <p><br></p>
-            <p id="message"></p>
-            <p><br></p>
         </div>
     </div>
     <footer class="bg-dark text-light text-center py-3">
-        <?php include './includes/footer.php'; ?></footer>
+        <?php include './includes/footer.php'; ?>
+    </footer>
 </body>
 
 </html>
