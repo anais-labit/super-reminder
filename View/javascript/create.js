@@ -64,7 +64,7 @@ async function fetchUserLists() {
 
       const cardBody = document.createElement("div");
       cardBody.classList.add("card-body", "input-group");
- 
+
       const listTitle = document.createElement("h5");
       listTitle.classList.add("card-title");
       listTitle.textContent = list.name;
@@ -243,12 +243,12 @@ async function fetchListTasks(listId) {
       oneTaskContainer.appendChild(taskDueDate);
 
       const clockIcon = document.createElement("i");
-      clockIcon.classList.add("fa-regular", "fa-clock"); 
+      clockIcon.classList.add("fa-regular", "fa-clock");
 
-      taskDueDate.appendChild(clockIcon); 
+      taskDueDate.appendChild(clockIcon);
       taskDueDate.appendChild(
-        document.createTextNode (" " + (formatDate(task.due_date)))
-      ); 
+        document.createTextNode(" " + formatDate(task.due_date))
+      );
 
       const taskStatusForm = document.createElement("form");
       taskStatusForm.setAttribute("class", "checkTaskForm");
@@ -327,13 +327,15 @@ async function addTasksAndDisplayMessage() {
           const tasksContainer = document.querySelector(
             `#tasksContainer-${listId}`
           );
+
+          tasksContainer.classList.add("list-group");
+
           const oneTaskContainer = document.createElement("li");
           oneTaskContainer.classList.add(
             "list-group-item",
             "d-flex",
             "justify-content-between",
-            "align-items-center",
-            "w-100"
+            "align-items-center"
           );
 
           const taskName = document.createElement("span");
@@ -353,12 +355,12 @@ async function addTasksAndDisplayMessage() {
           taskDueDate.setAttribute("id", `taskDueDate-${taskId}`);
 
           const clockIcon = document.createElement("i");
-          clockIcon.classList.add("fa-regular", "fa-clock"); 
+          clockIcon.classList.add("fa-regular", "fa-clock");
 
-          taskDueDate.appendChild(clockIcon); 
+          taskDueDate.appendChild(clockIcon);
 
           taskDueDate.appendChild(
-            document.createTextNode(" " + (formatDate(dueDateNewTask)))
+            document.createTextNode(" " + formatDate(dueDateNewTask))
           );
 
           oneTaskContainer.appendChild(taskDueDate);
@@ -395,4 +397,3 @@ async function addTasksAndDisplayMessage() {
     });
   }
 }
-
