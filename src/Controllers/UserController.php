@@ -63,7 +63,7 @@ class UserController
                     "success" => false,
                     "message" => "Le mot de passe doit contenir au minimum huit caractères, une majuscule, un chiffre et un caractère spécial."
                 ]);
-                var_dump($message);
+                echo $message;
             } else {
                 echo json_encode([
                     "success" => false,
@@ -92,7 +92,7 @@ class UserController
         $id = $userValidation->getOneUserInfos($login)['id'];
 
         $user->setId($id)
-        ->setLogin($login)
+            ->setLogin($login)
             ->setFirstname($firstname)
             ->setLastname($lastname)
             ->setPassword($hashedPassword)
